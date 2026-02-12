@@ -1,0 +1,370 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Private cartoon-friends social app (authenticated feed, stories, DMs, characters) — frontend plan",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add Internet Identity sign-in and gate the entire app behind authentication with a sign-in screen and sign-out control.",
+      "acceptanceCriteria": [
+        "Unauthenticated visitors see a sign-in screen with an Internet Identity login button.",
+        "After login, the user is routed into the app shell (navigation + main content).",
+        "A visible sign-out control returns the user to the sign-in screen."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the root app component that gates all routes behind Internet Identity authentication (show SignIn when unauthenticated, show AppShell when authenticated). Use the authorization component’s frontend guidance for login/logout behavior and cache clearing. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/SignIn.tsx",
+          "operation": "create",
+          "description": "Create a dedicated sign-in screen with an Internet Identity login button, app branding, and brief copy that the app is private. Use the authorization component’s recommended login flow and error handling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AppShell.tsx",
+          "operation": "create",
+          "description": "Create an authenticated-only shell layout that includes top navigation, sign-out control, and a main content outlet. Ensure sign-out clears React Query cache as recommended by the authorization component. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AuthButton.tsx",
+          "operation": "create",
+          "description": "Create a reusable Login/Logout button that uses useInternetIdentity() and clears React Query cache on logout per the authorization component guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Update QueryClient configuration to support authenticated-only app behavior (e.g., sensible defaults for retries) and ensure the app renders the new App.tsx gating implementation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Create a Characters screen to create/edit/delete user-owned cartoon-character profiles including avatar upload, with no bundled copyrighted assets.",
+      "acceptanceCriteria": [
+        "UI provides a 'Characters' screen listing existing character profiles with avatar, name, and short bio.",
+        "User can add a new character profile and upload an avatar image from their device.",
+        "User can edit and delete character profiles they created.",
+        "App does not include preloaded brand/franchise character images or names; all character content is user-provided."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Characters.tsx",
+          "operation": "create",
+          "description": "Implement the Characters screen: list character profiles, open create/edit dialogs, and support delete actions. Use shadcn-ui components for cards/forms/dialogs (compose without editing immutable sources). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/CharacterFormDialog.tsx",
+          "operation": "create",
+          "description": "Create a dialog form for adding/editing a character (name, bio, avatar upload). Include guardrail copy warning to upload only content the user owns/has permission to use. Use shadcn-ui form inputs/dialog. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AvatarImage.tsx",
+          "operation": "create",
+          "description": "Create an avatar renderer that displays a character/user avatar using blob-storage ExternalBlob.getDirectURL() when present, otherwise falls back to the generated default avatar asset. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/characters.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for character profile list and mutations (create/update/delete/upload avatar) using the typed backend interface; ensure cache invalidation keeps the list up-to-date."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the Characters screen into authenticated routing/navigation so it is reachable from the app shell."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Implement Home Feed: post composer (author selection, text, optional image), feed list, post detail, comments, and likes.",
+      "acceptanceCriteria": [
+        "Home shows a post composer and a reverse-chronological list of posts.",
+        "Composer supports text and optional image upload; author can be chosen from a dropdown (user + character profiles).",
+        "Each post shows author avatar/name, timestamp, text, optional image, like count, and comment count.",
+        "User can like/unlike a post.",
+        "User can view a post detail page and add comments; comments appear immediately after submission."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomeFeed.tsx",
+          "operation": "create",
+          "description": "Create the Home screen that renders Stories row (top), PostComposer, and a reverse-chronological feed list. Use React Query for fetching posts and shadcn-ui components for layout/cards. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/PostComposer.tsx",
+          "operation": "create",
+          "description": "Implement a composer with author dropdown (user + character profiles), text input, optional image picker, and submit action. Use blob-storage ExternalBlob for image upload packaging and shadcn-ui inputs/buttons. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/PostCard.tsx",
+          "operation": "create",
+          "description": "Create a post card showing author avatar/name, timestamp, text, optional image, like count, and comment count, with actions for like/unlike and navigation to detail. Use shadcn-ui components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/PostDetail.tsx",
+          "operation": "create",
+          "description": "Create a post detail screen that shows the post, likes, and a comments section with add-comment form. Ensure optimistic/instant UI updates via React Query invalidation/updates."
+        },
+        {
+          "path": "frontend/src/components/CommentsPanel.tsx",
+          "operation": "create",
+          "description": "Implement comments list + comment composer tied to a post, using React Query to fetch/add comments and update the UI immediately."
+        },
+        {
+          "path": "frontend/src/hooks/posts.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for fetching posts, creating posts (with optional blob-storage ExternalBlob image), liking posts, fetching comments, and adding comments. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire HomeFeed as the default authenticated route and add routing for PostDetail so post cards can navigate to it."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Implement Stories: create story (optional image + caption), display active stories row, and open a story viewer; hide expired stories (backend-filtered).",
+      "acceptanceCriteria": [
+        "User can create a story authored by the user or a selected character profile.",
+        "Stories display in a horizontal row and open into a viewer when clicked.",
+        "Expired stories are not returned by the backend and are not shown in the UI.",
+        "Story TTL is enforced using stored timestamps (not manual deletion required)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/StoriesRow.tsx",
+          "operation": "create",
+          "description": "Create a horizontal stories row that fetches stories with React Query and renders story tiles (avatar + label). Ensure it only displays returned (non-expired) stories."
+        },
+        {
+          "path": "frontend/src/components/CreateStoryDialog.tsx",
+          "operation": "create",
+          "description": "Add a create-story dialog with author selection (user + character profiles), optional image picker, caption input, and submit. Use blob-storage ExternalBlob for images and shadcn-ui dialog/form components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/StoryViewerDialog.tsx",
+          "operation": "create",
+          "description": "Implement a story viewer dialog that displays the story image (via ExternalBlob.getDirectURL()) and caption with appropriate sizing/cropping. Use shadcn-ui dialog components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/stories.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for fetching stories and creating a story (with blob-storage ExternalBlob), including cache invalidation so the row updates after creation. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomeFeed.tsx",
+          "operation": "modify",
+          "description": "Integrate StoriesRow at the top of HomeFeed and include a visible control to open CreateStoryDialog."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Implement Direct Messages: conversation list, thread view, send message with sender identity selection (user or character).",
+      "acceptanceCriteria": [
+        "UI provides an 'Messages' screen with a list of conversation threads.",
+        "Selecting a thread shows message history with clear sender identity (avatar/name).",
+        "User can send a message and choose the sender identity (user or a character profile) for that message.",
+        "Messages persist across reloads and are fetched from the backend."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Messages.tsx",
+          "operation": "create",
+          "description": "Create the Messages screen showing a conversation list and a selected thread panel (or navigation into a thread route). Use React Query for fetching conversations and shadcn-ui layout components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/MessageThread.tsx",
+          "operation": "create",
+          "description": "Create a thread view that renders message history with sender avatar/name and timestamp, and includes a send box with sender identity selector."
+        },
+        {
+          "path": "frontend/src/components/MessageComposer.tsx",
+          "operation": "create",
+          "description": "Implement message sending UI with sender dropdown (user + character profiles) and text input; on send, update UI immediately via React Query cache update/invalidation."
+        },
+        {
+          "path": "frontend/src/hooks/messages.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for fetching conversations, fetching a conversation by id, creating a conversation (if needed by UI), and sending messages. Ensure polling/refresh can be enabled for near-real-time updates (non-WebSocket) per non-goals."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Messages navigation/route(s) into the authenticated app shell so users can open the list and specific threads."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Add navigation and core screens: Home (Feed), Stories access from Home, Messages, Characters, and Profile/Settings; use React Query throughout.",
+      "acceptanceCriteria": [
+        "A consistent app shell provides navigation to Home, Messages, Characters, and Profile; Stories is accessible from Home (and optionally its own route).",
+        "Each screen loads without console errors and uses React Query for data fetching/caching.",
+        "Profile/Settings allows editing the signed-in user display name, bio, and avatar."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/PrimaryNav.tsx",
+          "operation": "create",
+          "description": "Create primary navigation (e.g., top nav or sidebar) linking to Home, Messages, Characters, and Profile. Use shadcn-ui navigation primitives/buttons. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Profile.tsx",
+          "operation": "create",
+          "description": "Create Profile/Settings screen to view/edit display name, bio, and avatar. Use authorization component guidance for first-time profile setup and avoid showing principal ids. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProfileSetupDialog.tsx",
+          "operation": "create",
+          "description": "Create a first-login profile setup dialog (asks for display name at minimum) that only appears when authenticated and getCallerUserProfile() returns null, using the authorization component’s anti-flash guidance. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/profile.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for getCallerUserProfile, saveCallerUserProfile, and updating avatar (via blob-storage ExternalBlob), including cache updates and error handling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AppShell.tsx",
+          "operation": "modify",
+          "description": "Integrate PrimaryNav and ensure the shell renders the appropriate screen content for the active route."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Define/wire routes for HomeFeed, Messages (and thread), Characters, Profile, and (optionally) Stories viewer access patterns; ensure all are only reachable when authenticated."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Define and apply a cohesive nostalgic/retro theme (Tailwind + shadcn/ui), avoiding blue/purple as primary accents.",
+      "acceptanceCriteria": [
+        "UI uses a consistent retro-inspired style (e.g., warm neutrals + neon accents, playful type scale, card styling) across navigation and content.",
+        "Theme is implemented with Tailwind and shadcn/ui components without editing immutable component sources.",
+        "Color palette avoids blue/purple as primary accents."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global Tailwind/shadcn theme variables and base styles to establish a retro palette (warm neutrals + neon accents) and consistent typography/spacing; ensure primary accents avoid blue/purple."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions (if needed) to support the retro palette and any required utility classes while keeping shadcn/ui compatibility."
+        },
+        {
+          "path": "frontend/src/components/AppShell.tsx",
+          "operation": "modify",
+          "description": "Apply consistent themed layout styling (background, cards, borders, spacing) using Tailwind utility classes and shadcn-ui components (compose without editing immutable sources). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/SignIn.tsx",
+          "operation": "modify",
+          "description": "Apply retro-themed styling to the sign-in screen (including background pattern usage) consistent with the global theme."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Add local image handling for avatars, post images, and story images using canister-friendly blobs and stable UI sizing/cropping.",
+      "acceptanceCriteria": [
+        "User can upload and display avatar images for user profile and character profiles.",
+        "User can upload and display images attached to posts and stories.",
+        "Images render with stable aspect handling (e.g., center-cropped thumbnails, full view on detail/viewer)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/images.ts",
+          "operation": "create",
+          "description": "Add utilities to convert File -> Uint8Array for blob-storage ExternalBlob.fromBytes, plus helpers for safe object sizing/cropping decisions in UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ImageCropFrame.tsx",
+          "operation": "create",
+          "description": "Create a reusable image frame component for consistent aspect handling (e.g., square avatars, post media cards, story viewer). Use blob-storage ExternalBlob.getDirectURL() for rendering when provided. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AvatarImage.tsx",
+          "operation": "modify",
+          "description": "Ensure avatar rendering supports stable center-cropped thumbnails, uses ExternalBlob.getDirectURL() when available, and falls back to the generated default avatar asset. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/PostComposer.tsx",
+          "operation": "modify",
+          "description": "Wire optional post image selection and upload packaging via blob-storage ExternalBlob; show a local preview and ensure consistent media display in the feed. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/CreateStoryDialog.tsx",
+          "operation": "modify",
+          "description": "Wire story image selection and upload packaging via blob-storage ExternalBlob; show preview and ensure viewer uses stable sizing/cropping. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add UX guardrails clarifying the app is private and users must only upload content they have rights to use; ensure no copyrighted seed content ships.",
+      "acceptanceCriteria": [
+        "Character creation flow includes a short notice about uploading only content you own or have permission to use.",
+        "No UI or seed data ships with copyrighted franchise images/logos."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SignIn.tsx",
+          "operation": "modify",
+          "description": "Add brief private-app notice and rights reminder copy on the sign-in screen (no copyrighted references, no bundled franchise assets)."
+        },
+        {
+          "path": "frontend/src/components/CharacterFormDialog.tsx",
+          "operation": "modify",
+          "description": "Add explicit notice in the character creation/edit flow reminding the user to upload only content they own or have permission to use."
+        },
+        {
+          "path": "frontend/src/pages/Profile.tsx",
+          "operation": "modify",
+          "description": "Add a short reminder near avatar upload controls about uploading only content the user has rights to use."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Include generated static branding assets (logo, background pattern, default avatar) and wire them into the login screen and app shell.",
+      "acceptanceCriteria": [
+        "Generated images are placed in frontend/public/assets/generated and used in the login screen and/or top navigation.",
+        "App builds and runs with these assets referenced as static files (no backend image serving for these specific branding assets)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated retro playful logo asset at frontend/public/assets/generated/logo.dim_512x512.png and ensure it is referenced from UI as a static file."
+        },
+        {
+          "path": "frontend/public/assets/generated/background-tile.dim_1024x1024.png",
+          "operation": "create",
+          "description": "Add the generated seamless retro pattern background tile at frontend/public/assets/generated/background-tile.dim_1024x1024.png and use it for the sign-in screen and/or app shell background."
+        },
+        {
+          "path": "frontend/public/assets/generated/default-avatar.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated default neutral avatar icon at frontend/public/assets/generated/default-avatar.dim_256x256.png and use it as the fallback avatar wherever an avatar is missing."
+        },
+        {
+          "path": "frontend/src/pages/SignIn.tsx",
+          "operation": "modify",
+          "description": "Wire in the generated branding assets: show frontend/public/assets/generated/logo.dim_512x512.png and apply frontend/public/assets/generated/background-tile.dim_1024x1024.png as a background treatment."
+        },
+        {
+          "path": "frontend/src/components/AppShell.tsx",
+          "operation": "modify",
+          "description": "Wire the generated logo (frontend/public/assets/generated/logo.dim_512x512.png) into the authenticated app shell (e.g., top nav branding) and ensure default avatar fallback is used consistently."
+        }
+      ]
+    }
+  ]
+}

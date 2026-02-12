@@ -1,0 +1,23 @@
+{
+  "frontend/src/App.tsx": "Root application component that handles authentication gating, profile setup flow, and renders either SignIn or AppShell based on auth state with ThemeProvider wrapper.",
+  "frontend/src/pages/SignIn.tsx": "Sign-in screen with Internet Identity login, featuring retro-styled branding, background pattern, and privacy notice about user-owned content.",
+  "frontend/src/components/AppShell.tsx": "Main authenticated app shell with sticky header, bottom navigation (Home/Messages/Characters/Profile), page routing, and logout functionality.",
+  "frontend/src/components/ProfileSetupDialog.tsx": "First-time user profile setup dialog that prompts for name when authenticated user has no profile, using undefined instead of null for optional avatar field.",
+  "frontend/src/pages/HomeFeed.tsx": "Home feed page displaying stories row, post composer, and reverse-chronological feed of posts with loading states and empty state messaging.",
+  "frontend/src/components/PostComposer.tsx": "Post creation form with author selection (user or character), text input, optional image upload with preview, and submission handling.",
+  "frontend/src/components/PostCard.tsx": "Individual post display card showing author info, content, optional image, like/comment counts, and expandable comments panel.",
+  "frontend/src/components/CommentsPanel.tsx": "Comments section for posts with comment list, author avatars, timestamps, and add-comment form with author selection.",
+  "frontend/src/components/StoriesRow.tsx": "Horizontal scrollable stories row with create button and story tiles, opening create/viewer dialogs on interaction.",
+  "frontend/src/components/CreateStoryDialog.tsx": "Story creation dialog with author selection, required image upload with preview, optional caption, and submission handling.",
+  "frontend/src/components/StoryViewerDialog.tsx": "Full-screen story viewer dialog displaying story image, author info, caption, and timestamp in an immersive black background layout.",
+  "frontend/src/pages/Characters.tsx": "Character management page listing all user-created character profiles with add/edit/delete actions and empty state prompts.",
+  "frontend/src/components/CharacterFormDialog.tsx": "Character create/edit dialog form with name, bio, avatar upload, content rights reminder, and save functionality.",
+  "frontend/src/components/AvatarImage.tsx": "Reusable avatar component with size variants, fallback to default avatar asset, and initials fallback using shadcn Avatar primitives.",
+  "frontend/src/pages/Messages.tsx": "Messages list page showing all conversations with character participants, last message preview, and navigation to thread view or create dialog.",
+  "frontend/src/components/CreateConversationDialog.tsx": "Conversation creation dialog with character selection checkboxes and validation for at least one participant.",
+  "frontend/src/components/MessageThread.tsx": "Full message thread view with scrollable message history, sender avatars, message bubbles, and send form with sender selection and polling for updates.",
+  "frontend/src/pages/Profile.tsx": "User profile settings page for editing name, bio, and avatar with content rights reminder, using undefined for optional avatar type compatibility.",
+  "frontend/src/hooks/useQueries.ts": "Centralized React Query hooks for all backend operations including user profile, characters, posts, comments, stories, and conversations with proper cache invalidation.",
+  "frontend/src/index.css": "Global styles with retro-inspired OKLCH color system featuring warm neutrals, vibrant magenta-pink primary, and neon accents for both light and dark modes.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended retro color palette, custom border radius scales, retro box shadows, and typography settings."
+}

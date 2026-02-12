@@ -1,0 +1,233 @@
+{
+  "kind": "build_request",
+  "title": "Private cartoon-friends social media app (feed, stories, DMs, character accounts)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Add Internet Identity sign-in and gate the entire app behind authentication so only the signed-in user can access the social network features.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create me a special social media app just for me..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated visitors see a sign-in screen with an Internet Identity login button.",
+        "After login, the user is routed into the app shell (navigation + main content).",
+        "A visible sign-out control returns the user to the sign-in screen."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement backend data models and APIs for a private social app: user profile, character profiles, follow/friend links, posts, comments, reactions (like), stories (ephemeral), and direct messages, all scoped to the authenticated user’s private space.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Itll be an app like Facebook, Snapchat and Instagram. Except its for me and these charicter friends of mine."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes typed methods to create/read/update the signed-in user profile.",
+        "Backend supports CRUD for character profiles (owned/managed by the signed-in user).",
+        "Backend supports creating feed posts (text + optional image) authored by either the user or one of the user’s character profiles.",
+        "Backend supports comments and likes on posts.",
+        "Backend supports stories with an expiration timestamp and a query that returns only non-expired stories.",
+        "Backend supports direct message threads and sending messages between the user and character profiles (and between character profiles), stored persistently in canister state."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Create a Character Directory feature where the signed-in user can create, edit, and manage their cartoon-character friend profiles (name, bio, avatar image) without shipping any copyrighted character assets by default.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "...cartoon charicters such as any charicters from the 90s and 2000s..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI provides a 'Characters' screen listing existing character profiles with avatar, name, and short bio.",
+        "User can add a new character profile and upload an avatar image from their device.",
+        "User can edit and delete character profiles they created.",
+        "App does not include preloaded brand/franchise character images or names; all character content is user-provided."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement a Home Feed experience similar to Facebook/Instagram: create post composer, feed list, post detail view, comments, and likes; allow selecting the author (the user or one of the user’s character profiles) when creating a post.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Itll be an app like Facebook... and Instagram."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home shows a post composer and a reverse-chronological list of posts.",
+        "Composer supports text and optional image upload; author can be chosen from a dropdown (user + character profiles).",
+        "Each post shows author avatar/name, timestamp, text, optional image, like count, and comment count.",
+        "User can like/unlike a post.",
+        "User can view a post detail page and add comments; comments appear immediately after submission."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement a Stories feature similar to Snapchat/Instagram: create story with optional image + caption; display active stories at the top of the app; stories automatically disappear after a configured TTL (e.g., 24 hours).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Itll be an app like ... Snapchat and Instagram."
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can create a story authored by the user or a selected character profile.",
+        "Stories display in a horizontal row and open into a viewer when clicked.",
+        "Expired stories are not returned by the backend and are not shown in the UI.",
+        "Story TTL is enforced using stored timestamps (not manual deletion required)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement Direct Messages similar to Instagram DMs: conversation list, thread view, and send message; support conversations between the user and any character profile, and allow posting messages as either the user or a selected character profile.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Itll be an app like Facebook, Snapchat and Instagram."
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI provides an 'Messages' screen with a list of conversation threads.",
+        "Selecting a thread shows message history with clear sender identity (avatar/name).",
+        "User can send a message and choose the sender identity (user or a character profile) for that message.",
+        "Messages persist across reloads and are fetched from the backend."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add navigation and core screens: Home (Feed), Stories, Messages, Characters, and Profile/Settings (for the signed-in user).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Itll be an app like Facebook, Snapchat and Instagram."
+        ]
+      },
+      "acceptanceCriteria": [
+        "A consistent app shell provides navigation to Home, Messages, Characters, and Profile; Stories is accessible from Home (and optionally its own route).",
+        "Each screen loads without console errors and uses React Query for data fetching/caching.",
+        "Profile/Settings allows editing the signed-in user display name, bio, and avatar."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Define a cohesive visual theme for the app and apply it consistently across all screens (colors, typography, spacing, and component styling). Theme should feel nostalgic/retro (90s/2000s-inspired) without using default blue/purple gradients.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "...cartoon charicters such as any charicters from the 90s and 2000s."
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI uses a consistent retro-inspired style (e.g., warm neutrals + neon accents, playful type scale, card styling) across navigation and content.",
+        "Theme is implemented with Tailwind and shadcn/ui components without editing immutable component sources.",
+        "Color palette avoids blue/purple as primary accents."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add local image handling for avatars, post images, and story images: store uploaded images in a canister-friendly way and render them in the UI with appropriate sizing/cropping.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "...like Facebook, Snapchat and Instagram."
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can upload and display avatar images for user profile and character profiles.",
+        "User can upload and display images attached to posts and stories.",
+        "Images render with stable aspect handling (e.g., center-cropped thumbnails, full view on detail/viewer)."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add basic safety/guardrails in UX copy: clarify that the app is private and that users should only upload content they have rights to use (no bundled copyrighted character assets).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Nickelodeon, Nick Jr, HIT Entertainment, Disney..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Character creation flow includes a short notice about uploading only content you own or have permission to use.",
+        "No UI or seed data ships with copyrighted franchise images/logos."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Generate and include static branding assets for the app (logo and background pattern) and wire them into the UI (login screen and app shell).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create me a special social media app just for me..."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are placed in frontend/public/assets/generated and used in the login screen and/or top navigation.",
+        "App builds and runs with these assets referenced as static files (no backend image serving for these specific branding assets)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (all logic in the main actor file).",
+    "Do not use external databases or third-party backend services.",
+    "Authentication must use Internet Identity only.",
+    "Do not edit files under frontend immutable paths (compose existing UI components instead).",
+    "Do not bundle or generate copyrighted character images/logos; character content must be user-provided."
+  ],
+  "nonGoals": [
+    "AI-driven character chat or LLM-generated conversations.",
+    "Real-time messaging via WebSockets/push notifications (use polling/refresh via React Query as needed).",
+    "Public social network/multi-tenant community discovery beyond the signed-in user’s private space.",
+    "Importing content from Facebook/Snapchat/Instagram or integrating their APIs.",
+    "Shipping pre-made Nickelodeon/Disney/etc. character packs or franchise art."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Retro playful app logo with a friendly mascot-style silhouette and chunky lettering (logo.dim_512x512.png)",
+      "Seamless retro sticker/pattern background with 90s/2000s vibes (background-tile.dim_1024x1024.png)",
+      "Default neutral avatar icon in a retro cartoon style (default-avatar.dim_256x256.png)"
+    ],
+    "edits": []
+  }
+}

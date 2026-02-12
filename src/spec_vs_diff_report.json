@@ -1,0 +1,109 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-12T00:25:11.042Z",
+  "summary": "Diff adds a Motoko backend actor with models for profiles/characters/posts/comments/stories/conversations, plus a React frontend with Internet Identity gating, app shell navigation, feed composer/cards with likes/comments, stories row + viewer + create dialog, character CRUD UI with avatar upload, and message thread/conversation creation components. Some key requirements are not evidenced (post detail view, story TTL/expiration, follow/friend links, safety copy), and there are a couple of unrequested additions (admin-token URL param initialization, Caffeine footer).",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Implement follow/friend links in the backend data models and APIs (scoped to authenticated user’s private space).",
+      "reason": "Backend types show `CharacterProfile.followers : [Text]` but the diff evidence does not show any typed API methods to create/read/update follow/friend links, and the truncated backend snippet doesn’t demonstrate this requirement is implemented.",
+      "evidence": [
+        "backend/main.mo (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Stories must have an expiration timestamp and a query that returns only non-expired stories (TTL enforced by stored timestamps).",
+      "reason": "The `Story`/`StoryView` types shown include only `timestamp` and do not include an expiration field; no non-expired filtering logic is evidenced in the truncated backend excerpt.",
+      "evidence": [
+        "backend/main.mo (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Provide a post detail view/page where a user can view a single post and add comments (comments appear immediately after submission).",
+      "reason": "UI evidence shows inline comment toggling via `PostCard` and `CommentsPanel`, but no dedicated post detail view/page or routing to it is shown in the diff summary.",
+      "evidence": [
+        "frontend/src/components/PostCard.tsx",
+        "frontend/src/components/CommentsPanel.tsx",
+        "frontend/src/components/AppShell.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Profile/Settings screen allows editing the signed-in user display name, bio, and avatar.",
+      "reason": "`AppShell` references a `Profile` page, but the diff summary does not include `frontend/src/pages/Profile.tsx` content (nor any UI for editing name/bio/avatar), so the AC is not evidenced as implemented.",
+      "evidence": [
+        "frontend/src/components/AppShell.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Character creation flow includes a short notice about uploading only content you own/have permission to use (private app; no copyrighted bundles).",
+      "reason": "The shown portion of the character creation dialog focuses on fields and image upload, but no guardrail notice text is visible in the provided/truncated content.",
+      "evidence": [
+        "frontend/src/components/CharacterFormDialog.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "Include generated static branding assets (logo + background pattern) in `frontend/public/assets/generated` and wire them into the UI (login screen and/or app shell).",
+      "reason": "UI references `/assets/generated/logo.dim_512x512.png` and `/assets/generated/default-avatar.dim_256x256.png`, but the diff summary does not show the actual generated asset files under `frontend/public/assets/generated` (files may be in omitted list). Also, the background pattern asset usage is not evidenced in the shown UI snippets.",
+      "evidence": [
+        "frontend/src/components/AppShell.tsx (truncated)",
+        "frontend/src/components/AvatarImage.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Admin access-control initialization via a secret URL parameter (`caffeineAdminToken`) invoked on actor creation.",
+      "reason": "Not requested by any REQ; authentication was specified to use Internet Identity only, with no mention of admin-token URL parameters.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts"
+      ]
+    },
+    {
+      "description": "Caffeine referral footer link in the app shell.",
+      "reason": "Not part of requested requirements/features; appears to be additional branding/referral UI.",
+      "evidence": [
+        "frontend/src/components/AppShell.tsx (truncated)"
+      ]
+    }
+  ],
+  "confidence": 0.62,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AppShell.tsx",
+    "frontend/src/components/AvatarImage.tsx",
+    "frontend/src/components/CharacterFormDialog.tsx",
+    "frontend/src/components/CommentsPanel.tsx",
+    "frontend/src/components/CreateConversationDialog.tsx",
+    "frontend/src/components/CreateStoryDialog.tsx",
+    "frontend/src/components/MessageThread.tsx",
+    "frontend/src/components/PostCard.tsx",
+    "frontend/src/components/PostComposer.tsx",
+    "frontend/src/components/ProfileSetupDialog.tsx",
+    "frontend/src/components/StoriesRow.tsx",
+    "frontend/src/components/StoryViewerDialog.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/Characters.tsx",
+    "frontend/src/pages/HomeFeed.tsx",
+    "frontend/src/pages/Messages.tsx",
+    "frontend/src/pages/Profile.tsx",
+    "frontend/src/pages/SignIn.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

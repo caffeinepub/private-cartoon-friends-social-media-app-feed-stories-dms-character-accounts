@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build a private social media app tailored for the user and their cartoon-character friends (90s/2000s characters), with core features similar to Facebook, Snapchat, and Instagram.",
+  "architectural_notes": [
+    "Consider IP/licensing constraints for using recognizable cartoon characters and brands; may require original avatars/characters or licensed content."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Retro playful app logo with a friendly mascot-style silhouette and chunky lettering (logo.dim_512x512.png)\n- Seamless retro sticker/pattern background with 90s/2000s vibes (background-tile.dim_1024x1024.png)\n- Default neutral avatar icon in a retro cartoon style (default-avatar.dim_256x256.png)",
+  "existing_features": [
+    {
+      "id": "feature-add-internet-identity-sign-in-and-gate-the-entire-app-behind-authentication-so-only-the-signed-in-user-can-access-the-social-network-features",
+      "title": "Add Internet Identity sign-in and gate the entire app behind authentication so only the signed-in user can access the social network features.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-character-directory-feature-where-the-signed-in-user-can-create-edit-and-manage-their-cartoon-character-friend-profiles-name-bio-avatar-image-without-shipping-any-copyrighted-character-assets-by-default",
+      "title": "Create a Character Directory feature where the signed-in user can create, edit, and manage their cartoon-character friend profiles (name, bio, avatar image) without shipping any copyrighted character assets by default.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-home-feed-experience-similar-to-facebook-instagram-create-post-composer-feed-list-post-detail-view-comments-and-likes-allow-selecting-the-author-the-user-or-one-of-the-user-s-character-profiles-when-creating-a-post",
+      "title": "Implement a Home Feed experience similar to Facebook/Instagram: create post composer, feed list, post detail view, comments, and likes; allow selecting the author (the user or one of the user’s character profiles) when creating a post.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-stories-feature-similar-to-snapchat-instagram-create-story-with-optional-image-caption-display-active-stories-at-the-top-of-the-app-stories-automatically-disappear-after-a-configured-ttl-e-g-24-hours",
+      "title": "Implement a Stories feature similar to Snapchat/Instagram: create story with optional image + caption; display active stories at the top of the app; stories automatically disappear after a configured TTL (e.g., 24 hours).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-direct-messages-similar-to-instagram-dms-conversation-list-thread-view-and-send-message-support-conversations-between-the-user-and-any-character-profile-and-allow-posting-messages-as-either-the-user-or-a-selected-character-profile",
+      "title": "Implement Direct Messages similar to Instagram DMs: conversation list, thread view, and send message; support conversations between the user and any character profile, and allow posting messages as either the user or a selected character profile.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-navigation-and-core-screens-home-feed-stories-messages-characters-and-profile-settings-for-the-signed-in-user",
+      "title": "Add navigation and core screens: Home (Feed), Stories, Messages, Characters, and Profile/Settings (for the signed-in user).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-define-a-cohesive-visual-theme-for-the-app-and-apply-it-consistently-across-all-screens-colors-typography-spacing-and-component-styling-theme-should-feel-nostalgic-retro-90s-2000s-inspired-without-using-default-blue-purple-gradients",
+      "title": "Define a cohesive visual theme for the app and apply it consistently across all screens (colors, typography, spacing, and component styling). Theme should feel nostalgic/retro (90s/2000s-inspired) without using default blue/purple gradients.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-local-image-handling-for-avatars-post-images-and-story-images-store-uploaded-images-in-a-canister-friendly-way-and-render-them-in-the-ui-with-appropriate-sizing-cropping",
+      "title": "Add local image handling for avatars, post images, and story images: store uploaded images in a canister-friendly way and render them in the UI with appropriate sizing/cropping.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-safety-guardrails-in-ux-copy-clarify-that-the-app-is-private-and-that-users-should-only-upload-content-they-have-rights-to-use-no-bundled-copyrighted-character-assets",
+      "title": "Add basic safety/guardrails in UX copy: clarify that the app is private and that users should only upload content they have rights to use (no bundled copyrighted character assets).",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-and-include-static-branding-assets-for-the-app-logo-and-background-pattern-and-wire-them-into-the-ui-login-screen-and-app-shell",
+      "title": "Generate and include static branding assets for the app (logo and background pattern) and wire them into the UI (login screen and app shell).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a private social media app for the user featuring interactions with cartoon-character friends, with functionality inspired by Facebook/Snapchat/Instagram (feed, messaging, stories, etc.).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Implement backend data models and APIs for a private social app: user profile, character profiles, follow/friend links, posts, comments, reactions (like), stories (ephemeral), and direct messages, all scoped to the authenticated user’s private space.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Private cartoon-friends social media app (feed, stories, DMs, character accounts)",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

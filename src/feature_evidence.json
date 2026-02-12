@@ -1,0 +1,230 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-internet-identity-sign-in-and-gate-the-entire-app-behind-authentication-so-only-the-signed-in-user-can-access-the-social-network-features",
+      "featureTitle": "Add Internet Identity sign-in and gate the entire app behind authentication so only the signed-in user can access the social network features.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/main.tsx",
+        "frontend/src/pages/SignIn.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-a-character-directory-feature-where-the-signed-in-user-can-create-edit-and-manage-their-cartoon-character-friend-profiles-name-bio-avatar-image-without-shipping-any-copyrighted-character-assets-by-default",
+      "featureTitle": "Create a Character Directory feature where the signed-in user can create, edit, and manage their cartoon-character friend profiles (name, bio, avatar image) without shipping any copyrighted character assets by default.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AvatarImage.tsx",
+        "frontend/src/components/CharacterFormDialog.tsx",
+        "frontend/src/pages/Characters.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-home-feed-experience-similar-to-facebook-instagram-create-post-composer-feed-list-post-detail-view-comments-and-likes-allow-selecting-the-author-the-user-or-one-of-the-user-s-character-profiles-when-creating-a-post",
+      "featureTitle": "Implement a Home Feed experience similar to Facebook/Instagram: create post composer, feed list, post detail view, comments, and likes; allow selecting the author (the user or one of the user’s character profiles) when creating a post.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/CommentsPanel.tsx",
+        "frontend/src/components/PostCard.tsx",
+        "frontend/src/components/PostComposer.tsx",
+        "frontend/src/pages/HomeFeed.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-stories-feature-similar-to-snapchat-instagram-create-story-with-optional-image-caption-display-active-stories-at-the-top-of-the-app-stories-automatically-disappear-after-a-configured-ttl-e-g-24-hours",
+      "featureTitle": "Implement a Stories feature similar to Snapchat/Instagram: create story with optional image + caption; display active stories at the top of the app; stories automatically disappear after a configured TTL (e.g., 24 hours).",
+      "files": [
+        "frontend/src/components/CreateStoryDialog.tsx",
+        "frontend/src/components/StoriesRow.tsx",
+        "frontend/src/components/StoryViewerDialog.tsx",
+        "frontend/src/pages/HomeFeed.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-direct-messages-similar-to-instagram-dms-conversation-list-thread-view-and-send-message-support-conversations-between-the-user-and-any-character-profile-and-allow-posting-messages-as-either-the-user-or-a-selected-character-profile",
+      "featureTitle": "Implement Direct Messages similar to Instagram DMs: conversation list, thread view, and send message; support conversations between the user and any character profile, and allow posting messages as either the user or a selected character profile.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/Messages.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-navigation-and-core-screens-home-feed-stories-messages-characters-and-profile-settings-for-the-signed-in-user",
+      "featureTitle": "Add navigation and core screens: Home (Feed), Stories, Messages, Characters, and Profile/Settings (for the signed-in user).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/components/ProfileSetupDialog.tsx",
+        "frontend/src/pages/Profile.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-define-a-cohesive-visual-theme-for-the-app-and-apply-it-consistently-across-all-screens-colors-typography-spacing-and-component-styling-theme-should-feel-nostalgic-retro-90s-2000s-inspired-without-using-default-blue-purple-gradients",
+      "featureTitle": "Define a cohesive visual theme for the app and apply it consistently across all screens (colors, typography, spacing, and component styling). Theme should feel nostalgic/retro (90s/2000s-inspired) without using default blue/purple gradients.",
+      "files": [
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/SignIn.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-local-image-handling-for-avatars-post-images-and-story-images-store-uploaded-images-in-a-canister-friendly-way-and-render-them-in-the-ui-with-appropriate-sizing-cropping",
+      "featureTitle": "Add local image handling for avatars, post images, and story images: store uploaded images in a canister-friendly way and render them in the UI with appropriate sizing/cropping.",
+      "files": [
+        "frontend/src/components/AvatarImage.tsx",
+        "frontend/src/components/CreateStoryDialog.tsx",
+        "frontend/src/components/PostComposer.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-basic-safety-guardrails-in-ux-copy-clarify-that-the-app-is-private-and-that-users-should-only-upload-content-they-have-rights-to-use-no-bundled-copyrighted-character-assets",
+      "featureTitle": "Add basic safety/guardrails in UX copy: clarify that the app is private and that users should only upload content they have rights to use (no bundled copyrighted character assets).",
+      "files": [
+        "frontend/src/components/CharacterFormDialog.tsx",
+        "frontend/src/pages/Profile.tsx",
+        "frontend/src/pages/SignIn.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-and-include-static-branding-assets-for-the-app-logo-and-background-pattern-and-wire-them-into-the-ui-login-screen-and-app-shell",
+      "featureTitle": "Generate and include static branding assets for the app (logo and background pattern) and wire them into the UI (login screen and app shell).",
+      "files": [
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/pages/SignIn.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
