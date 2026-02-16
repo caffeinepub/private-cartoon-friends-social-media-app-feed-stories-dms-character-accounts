@@ -119,7 +119,7 @@
     background: oklch(var(--primary));
 }
 
-/* Scrollable Select Content - Mobile-friendly dropdown */
+/* Scrollable Select Content - Mobile-friendly dropdown with functional scroll buttons */
 .scrollable-select-content {
     position: relative;
 }
@@ -131,37 +131,21 @@
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
+    scroll-behavior: smooth;
 }
 
-/* Scroll indicators for dropdowns */
-.scroll-indicator {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
+/* Ensure scroll buttons are positioned correctly and clickable */
+.scrollable-select-content [data-radix-select-scroll-up-button],
+.scrollable-select-content [data-radix-select-scroll-down-button] {
+    position: sticky;
     z-index: 10;
-    background: linear-gradient(to bottom, oklch(var(--popover)), transparent);
-    color: oklch(var(--primary));
+    width: 100%;
 }
 
-.scroll-indicator-top {
+.scrollable-select-content [data-radix-select-scroll-up-button] {
     top: 0;
-    background: linear-gradient(to bottom, oklch(var(--popover)), transparent);
 }
 
-.scroll-indicator-bottom {
+.scrollable-select-content [data-radix-select-scroll-down-button] {
     bottom: 0;
-    background: linear-gradient(to top, oklch(var(--popover)), transparent);
-}
-
-.dark .scroll-indicator-top {
-    background: linear-gradient(to bottom, oklch(var(--popover)), transparent);
-}
-
-.dark .scroll-indicator-bottom {
-    background: linear-gradient(to top, oklch(var(--popover)), transparent);
 }

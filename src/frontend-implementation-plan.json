@@ -1,98 +1,80 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Mobile-friendly scrollable author Select dropdowns with visible scroll arrows",
+  "title": "Scrollable long-name Select dropdowns with Radix up/down controls",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Ensure author/sender Select option lists are viewport-constrained and reliably finger-scrollable on mobile without scrolling the page behind.",
+      "summary": "Make long-name Select dropdowns reliably vertically scrollable (wheel/trackpad/touch) and add explicit Up/Down controls without blocking item interaction.",
       "acceptanceCriteria": [
-        "In PostComposer, CommentsPanel, CreateStoryDialog, and MessageThread, opening the author/sender Select on a mobile/touch device constrains the options list to a fixed max height (relative to viewport) and enables vertical scrolling within the list.",
-        "On mobile, a finger swipe/drag inside the open dropdown scrolls the list up/down and does not scroll the page behind it.",
-        "The last items in the list can be reached and selected on small screens without the dropdown extending off-screen.",
-        "The scroll behavior is consistent across the post composer, comment composer, story composer, and message sender selector."
+        "When a Select dropdown contains more items than can fit on screen, the dropdown viewport scrolls vertically via mouse wheel/trackpad on desktop.",
+        "On touch devices, the dropdown viewport scrolls vertically via touch drag inside the list.",
+        "Visible Up and Down controls are present for overflowing lists and pressing them scrolls the list up/down.",
+        "Users can scroll to and select names at both the top and bottom of long lists without the list getting stuck.",
+        "No UI element (e.g., scroll indicators) blocks taps/clicks on list items."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/ScrollableSelectContent.tsx",
-          "operation": "create",
-          "description": "Create a reusable wrapper that composes the existing shadcn SelectContent (do not edit ui components) to: constrain option list height relative to viewport, enable touch momentum scrolling, contain overscroll to prevent background/page scroll, and expose hooks needed for scroll-state detection. Verify the component's usage instructions before implementing."
+          "operation": "modify",
+          "description": "Replace the current non-interactive top/bottom scroll indicators with an implementation that preserves vertical scrolling and supports touch dragging inside the viewport; ensure the Select viewport element remains the scroll container and that added UI does not intercept list item clicks."
         },
         {
           "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Add global CSS utility classes (used by ScrollableSelectContent) to improve mobile/touch scrolling reliability (e.g., overscroll containment, touch-action pan-y, and -webkit-overflow-scrolling) without modifying any files under frontend/src/components/ui."
-        },
-        {
-          "path": "frontend/src/components/PostComposer.tsx",
-          "operation": "modify",
-          "description": "Replace the inline SelectContent max-height/overflow styling with the new ScrollableSelectContent wrapper so the author dropdown is viewport-constrained and reliably scrollable on mobile. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/CommentsPanel.tsx",
-          "operation": "modify",
-          "description": "Update the author Select dropdown to use ScrollableSelectContent to ensure touch scrolling works and the list does not overflow the viewport on mobile. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/CreateStoryDialog.tsx",
-          "operation": "modify",
-          "description": "Update the author Select dropdown to use ScrollableSelectContent to ensure touch scrolling works and the list does not overflow the viewport on mobile. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/MessageThread.tsx",
-          "operation": "modify",
-          "description": "Update the sender Select dropdown to use ScrollableSelectContent to ensure touch scrolling works and the list does not overflow the viewport on mobile. Verify the component's usage instructions before implementing."
+          "description": "Adjust the .scrollable-select-content styles so the Radix Select viewport consistently supports overflow scrolling (desktop wheel/trackpad + mobile touch drag) and ensure any scroll affordances/buttons do not overlay and block selecting items."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Add a visible scroll affordance (side indicator and up/down arrow controls) to name dropdowns only when the option list overflows.",
+      "summary": "Implement functional in-dropdown up/down scroll buttons using the already-imported Radix SelectScrollUpButton/SelectScrollDownButton and show them only when scrolling is possible.",
       "acceptanceCriteria": [
-        "When the Select dropdown list has overflow (more items than the visible area), the UI displays a clear visual indicator on the side that the list can be scrolled (e.g., up/down chevrons on the right edge and/or a visible scrollbar track/thumb).",
-        "The indicator does not block tapping list items and does not prevent touch scrolling.",
-        "If the list does not overflow, the scroll indicator/arrow controls are hidden or visually disabled."
+        "ScrollableSelectContent renders functional Up/Down scroll buttons (not just visual indicators) when the list can scroll.",
+        "Up button is hidden/disabled at the top of the list; Down button is hidden/disabled at the bottom of the list.",
+        "Holding or repeatedly pressing the buttons scrolls through the list predictably."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/ScrollableSelectContent.tsx",
           "operation": "modify",
-          "description": "Enhance ScrollableSelectContent to detect overflow and current scroll position and render right-edge up/down chevrons as a scroll affordance; ensure indicators/controls do not block option taps and do not interfere with touch scrolling; hide/disable indicators when there is no overflow. Verify the component's usage instructions before implementing."
+          "description": "Use Radix SelectScrollUpButton and SelectScrollDownButton (already imported) inside ScrollableSelectContent; wire them to appear only when the viewport can scroll up/down based on current scroll position and content height, and ensure press-and-hold/repeat behavior works predictably."
         },
         {
           "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Add minimal styling support for the dropdown scroll affordance (e.g., positioning, gradients, and pointer-events behavior) used by ScrollableSelectContent so the arrows are clearly visible without blocking interactions."
+          "description": "Add/adjust styling hooks for the Radix scroll buttons rendered by ScrollableSelectContent (e.g., sizing, alignment, background) so they are visible, tappable, and do not obstruct the viewport's selectable items."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Apply the same scrollable dropdown + indicator treatment to all existing author/sender Select usages in post/comment/story/message creation UIs.",
+      "summary": "Ensure all name/friend/character Select dropdowns use the shared ScrollableSelectContent so the long-list scrolling fix applies everywhere.",
       "acceptanceCriteria": [
-        "A code review confirms the author/sender SelectContent in: frontend/src/components/PostComposer.tsx, frontend/src/components/CommentsPanel.tsx, frontend/src/components/CreateStoryDialog.tsx, and frontend/src/components/MessageThread.tsx all include the same scrollable dropdown treatment (max height + overflow + touch-friendly scrolling + indicator behavior).",
-        "No regression: selecting an author/sender still works and the selected value renders correctly in the SelectTrigger in all affected components."
+        "All existing Select-based name pickers across the app use the scroll-enabled dropdown content component.",
+        "At least the selectors in PostComposer and CommentsPanel continue to work and allow reaching any name with many entries.",
+        "No regressions: selecting an item still closes the dropdown and sets the selected value correctly."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/PostComposer.tsx",
           "operation": "modify",
-          "description": "Standardize the author dropdown to use ScrollableSelectContent (and remove any divergent inline SelectContent scroll styling) so behavior matches the other author/sender pickers. Verify the component's usage instructions before implementing."
+          "description": "Audit the author selector Select usage to confirm it uses ScrollableSelectContent (not plain SelectContent) and update any props/structure needed to remain compatible with the improved scroll buttons and scrolling behavior."
         },
         {
           "path": "frontend/src/components/CommentsPanel.tsx",
           "operation": "modify",
-          "description": "Standardize the comment author dropdown to use ScrollableSelectContent (and remove any divergent inline SelectContent scroll styling) so behavior matches the other author/sender pickers. Verify the component's usage instructions before implementing."
+          "description": "Audit the comment author selector Select usage to ensure it uses ScrollableSelectContent everywhere and adjust wiring if needed so selecting an item still closes the dropdown and updates the selected value correctly."
         },
         {
           "path": "frontend/src/components/CreateStoryDialog.tsx",
           "operation": "modify",
-          "description": "Standardize the story author dropdown to use ScrollableSelectContent (and remove any divergent inline SelectContent scroll styling) so behavior matches the other author/sender pickers. Verify the component's usage instructions before implementing."
+          "description": "Audit the story author selector Select usage to ensure it uses ScrollableSelectContent and remains compatible with the improved scrollable dropdown behavior for long character lists."
         },
         {
           "path": "frontend/src/components/MessageThread.tsx",
           "operation": "modify",
-          "description": "Standardize the message sender dropdown to use ScrollableSelectContent (and remove any divergent inline SelectContent scroll styling) so behavior matches the other author/sender pickers. Verify the component's usage instructions before implementing."
+          "description": "Audit the message sender selector Select usage to ensure it uses ScrollableSelectContent and validate that long sender lists can be fully reached and selected without the dropdown getting stuck."
         }
       ]
     }

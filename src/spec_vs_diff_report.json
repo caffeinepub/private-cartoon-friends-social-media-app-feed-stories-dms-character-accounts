@@ -1,35 +1,13 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T20:59:33.329Z",
-  "summary": "Implemented a new ScrollableSelectContent wrapper and applied it to the author/sender Select dropdowns in PostComposer, CommentsPanel, CreateStoryDialog, and MessageThread. Added CSS to constrain dropdown viewport height and enable touch-friendly scrolling, plus visual chevron indicators that appear when the list can scroll.",
-  "missing_requirements": [
-    {
-      "id": "REQ-2",
-      "requirement": "Add a clear scroll affordance to the open name dropdown list by showing a side scroll indicator/arrow controls when the list is scrollable.",
-      "reason": "The implementation adds top/bottom overlay chevrons (indicators) but does not clearly implement a *side* scroll indicator/arrow control as described (e.g., on the right edge). While this may still be an acceptable affordance, the diff evidence does not show a side/right-edge indicator or explicit visible scrollbar thumb scoped to the dropdown only.",
-      "evidence": [
-        "frontend/src/components/ScrollableSelectContent.tsx",
-        "frontend/src/index.css"
-      ]
-    }
-  ],
-  "hallucinated_features": [
-    {
-      "description": "Global custom scrollbar styling for all scrollbars via ::-webkit-scrollbar rules (not limited to the dropdown).",
-      "reason": "REQ-2 discusses scroll affordance for the Select dropdown list; the diff adds global scrollbar theming which affects the entire app, not just the name picker dropdown, and this broader styling change was not explicitly requested.",
-      "evidence": [
-        "frontend/src/index.css"
-      ]
-    }
-  ],
-  "confidence": 0.62,
+  "generatedAt": "2026-02-16T23:02:31.814Z",
+  "summary": "Implemented a scroll-enabled Select dropdown content wrapper with Radix functional scroll up/down buttons, plus CSS to enable vertical scrolling (including touch) within the Select viewport, and updated multiple name-picker components (per file summary) to use the shared ScrollableSelectContent so the fix applies across the app.",
+  "missing_requirements": [],
+  "hallucinated_features": [],
+  "confidence": 0.74,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/CommentsPanel.tsx",
-    "frontend/src/components/CreateStoryDialog.tsx",
-    "frontend/src/components/MessageThread.tsx",
-    "frontend/src/components/PostComposer.tsx",
     "frontend/src/components/ScrollableSelectContent.tsx",
     "frontend/src/index.css",
     "project_state.json"

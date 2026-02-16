@@ -2,13 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-make-the-author-name-selection-dropdowns-reliably-scrollable-on-mobile-vertical-up-down-so-the-list-does-not-overflow-the-viewport-and-finger-scrolling-works-to-reach-all-names",
-      "featureTitle": "Make the author/name selection dropdowns reliably scrollable on mobile (vertical up/down) so the list does not overflow the viewport and finger scrolling works to reach all names.",
+      "featureId": "feature-update-the-custom-select-dropdown-used-for-long-name-lists-so-users-can-reliably-reach-any-name-by-scrolling-vertically-mouse-wheel-trackpad-and-touch-drag-and-by-clicking-tapping-explicit-up-down-arrow-controls-when-the-list-overflows",
+      "featureTitle": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
       "files": [
-        "frontend/src/components/CommentsPanel.tsx",
-        "frontend/src/components/CreateStoryDialog.tsx",
-        "frontend/src/components/MessageThread.tsx",
-        "frontend/src/components/PostComposer.tsx",
         "frontend/src/components/ScrollableSelectContent.tsx",
         "frontend/src/index.css"
       ],
@@ -27,8 +23,8 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-clear-scroll-affordance-to-the-open-name-dropdown-list-by-showing-a-side-scroll-indicator-arrow-controls-when-the-list-is-scrollable",
-      "featureTitle": "Add a clear scroll affordance to the open name dropdown list by showing a side scroll indicator/arrow controls when the list is scrollable.",
+      "featureId": "feature-implement-the-up-down-arrow-controls-inside-the-scrollable-select-dropdown-by-using-the-existing-radix-select-scroll-button-components-already-imported-in-scrollableselectcontent-and-ensure-they-are-only-shown-when-scrolling-is-possible-in-that-direction",
+      "featureTitle": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
       "files": [
         "frontend/src/components/ScrollableSelectContent.tsx",
         "frontend/src/index.css"
@@ -44,29 +40,6 @@
       ],
       "testIds": [
         "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-ensure-the-mobile-scrolling-fix-applies-to-all-existing-user-character-author-selection-select-components-used-when-creating-content-post-comment-story-message-so-no-screen-still-uses-a-non-scrollable-dropdown-variant",
-      "featureTitle": "Ensure the mobile scrolling fix applies to all existing user/character author selection Select components used when creating content (post/comment/story/message) so no screen still uses a non-scrollable dropdown variant.",
-      "files": [
-        "frontend/src/components/CommentsPanel.tsx",
-        "frontend/src/components/CreateStoryDialog.tsx",
-        "frontend/src/components/MessageThread.tsx",
-        "frontend/src/components/PostComposer.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "blob-storage@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
       ],
       "confidence": "high"
     }

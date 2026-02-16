@@ -1,90 +1,77 @@
 {
   "kind": "build_request",
-  "title": "Fix mobile author/name picker scrolling and add visible scroll arrows",
+  "title": "Fix long friend/name selector: enable vertical scrolling and up/down arrow controls",
   "projectName": "ToonSpace",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Make the author/name selection dropdowns reliably scrollable on mobile (vertical up/down) so the list does not overflow the viewport and finger scrolling works to reach all names.",
+      "text": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-7",
-          "msg-9"
+          "msg-4"
         ],
         "quotes": [
-          "when the names come up, they all show, but the list doesn't show them completely in front of me and when I move my finger to try to scroll the list up and down, it won't move the names up and down.",
-          "Like give them the ability to scroll through them names up and down."
+          "Like I said it wont let me scroll through yhe names up and down. I want to be able to have an up and down arrow to press or the ability to scroll up and down."
         ]
       },
       "acceptanceCriteria": [
-        "In PostComposer, CommentsPanel, CreateStoryDialog, and MessageThread, opening the author/sender Select on a mobile/touch device constrains the options list to a fixed max height (relative to viewport) and enables vertical scrolling within the list.",
-        "On mobile, a finger swipe/drag inside the open dropdown scrolls the list up/down and does not scroll the page behind it.",
-        "The last items in the list can be reached and selected on small screens without the dropdown extending off-screen.",
-        "The scroll behavior is consistent across the post composer, comment composer, story composer, and message sender selector."
+        "When a Select dropdown contains more items than can fit on screen, the dropdown viewport scrolls vertically via mouse wheel/trackpad on desktop.",
+        "On touch devices, the dropdown viewport scrolls vertically via touch drag inside the list.",
+        "Visible Up and Down controls are present for overflowing lists and pressing them scrolls the list up/down.",
+        "Users can scroll to and select names at both the top and bottom of long lists without the list getting stuck.",
+        "No UI element (e.g., scroll indicators) blocks taps/clicks on list items."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add a clear scroll affordance to the open name dropdown list by showing a side scroll indicator/arrow controls when the list is scrollable.",
+      "text": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-9"
+          "msg-4"
         ],
         "quotes": [
-          "Like give them a side scrolling arrow too."
+          "I want to be able to have an up and down arrow to press"
         ]
       },
       "acceptanceCriteria": [
-        "When the Select dropdown list has overflow (more items than the visible area), the UI displays a clear visual indicator on the side that the list can be scrolled (e.g., up/down chevrons on the right edge and/or a visible scrollbar track/thumb).",
-        "The indicator does not block tapping list items and does not prevent touch scrolling.",
-        "If the list does not overflow, the scroll indicator/arrow controls are hidden or visually disabled."
+        "ScrollableSelectContent renders functional Up/Down scroll buttons (not just visual indicators) when the list can scroll.",
+        "Up button is hidden/disabled at the top of the list; Down button is hidden/disabled at the bottom of the list.",
+        "Holding or repeatedly pressing the buttons scrolls through the list predictably."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Ensure the mobile scrolling fix applies to all existing user/character author selection Select components used when creating content (post/comment/story/message) so no screen still uses a non-scrollable dropdown variant.",
+      "text": "Audit all name/friend/character selection dropdowns and ensure they use the shared ScrollableSelectContent wrapper (or equivalent scroll-enabled SelectContent) so the long-list scrolling fix applies everywhere names are chosen (e.g., post author selector, comment author selector, story author selector, message sender selector).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-7",
-          "msg-9"
+          "msg-4"
         ],
         "quotes": [
-          "the list doesn't show them completely in front of me",
-          "give them the ability to scroll through them names up and down"
+          "when I have an idea for a post to come from someone,  or for a coment from a certain someone I cant reach to their name"
         ]
       },
       "acceptanceCriteria": [
-        "A code review confirms the author/sender SelectContent in: frontend/src/components/PostComposer.tsx, frontend/src/components/CommentsPanel.tsx, frontend/src/components/CreateStoryDialog.tsx, and frontend/src/components/MessageThread.tsx all include the same scrollable dropdown treatment (max height + overflow + touch-friendly scrolling + indicator behavior).",
-        "No regression: selecting an author/sender still works and the selected value renders correctly in the SelectTrigger in all affected components."
+        "All existing Select-based name pickers across the app use the scroll-enabled dropdown content component.",
+        "At least the selectors in PostComposer and CommentsPanel continue to work and allow reaching any name with many entries.",
+        "No regressions: selecting an item still closes the dropdown and sets the selected value correctly."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/components/ui (read-only UI components must be composed, not edited).",
-    "Keep the Internet Identity/auth hooks unchanged (frontend/src/hooks/useInternetIdentity.ts / useActor.ts are immutable).",
-    "Do not introduce new backend canisters or external services; this change must be frontend-only."
+    "Do not edit files under frontend/src/components/ui (shadcn components); compose/wrap them instead.",
+    "Keep all backend logic in the existing single Motoko actor; no backend changes are required for this UI scrolling fix."
   ],
   "nonGoals": [
-    "Do not implement a full-screen picker modal unless explicitly requested later.",
-    "Do not change backend data models for users/characters/posts/comments/messages.",
-    "Do not add real-time syncing or WebSocket-based updates."
+    "Adding new backend endpoints or changing Motoko data models for friends/characters.",
+    "Implementing search, filtering, or sorting for the friend/name list (only scrolling + arrow navigation is in scope).",
+    "Adding real-time syncing or chat features beyond the existing messaging UI."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

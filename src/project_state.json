@@ -1,34 +1,26 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "App UI: character/name picker used in post/comment composer needs a mobile-friendly, scrollable selector so users can browse names without the list overflowing the screen.",
+  "summary": "Project focused on improving friend/name selection usability: users with many friends cannot scroll through the name list to reach desired names.",
   "architectural_notes": [],
   "known_issues": [
-    "On mobile, the name/character dropdown list overflows the screen and does not respond to finger scrolling, preventing users from viewing all names."
+    "Friends/name list cannot be scrolled up/down, preventing users from reaching names in long lists."
   ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-make-the-author-name-selection-dropdowns-reliably-scrollable-on-mobile-vertical-up-down-so-the-list-does-not-overflow-the-viewport-and-finger-scrolling-works-to-reach-all-names",
-      "title": "Make the author/name selection dropdowns reliably scrollable on mobile (vertical up/down) so the list does not overflow the viewport and finger scrolling works to reach all names.",
+      "id": "feature-update-the-custom-select-dropdown-used-for-long-name-lists-so-users-can-reliably-reach-any-name-by-scrolling-vertically-mouse-wheel-trackpad-and-touch-drag-and-by-clicking-tapping-explicit-up-down-arrow-controls-when-the-list-overflows",
+      "title": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-a-clear-scroll-affordance-to-the-open-name-dropdown-list-by-showing-a-side-scroll-indicator-arrow-controls-when-the-list-is-scrollable",
-      "title": "Add a clear scroll affordance to the open name dropdown list by showing a side scroll indicator/arrow controls when the list is scrollable.",
+      "id": "feature-implement-the-up-down-arrow-controls-inside-the-scrollable-select-dropdown-by-using-the-existing-radix-select-scroll-button-components-already-imported-in-scrollableselectcontent-and-ensure-they-are-only-shown-when-scrolling-is-possible-in-that-direction",
+      "title": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
       "reqIds": [
         "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-ensure-the-mobile-scrolling-fix-applies-to-all-existing-user-character-author-selection-select-components-used-when-creating-content-post-comment-story-message-so-no-screen-still-uses-a-non-scrollable-dropdown-variant",
-      "title": "Ensure the mobile scrolling fix applies to all existing user/character author selection Select components used when creating content (post/comment/story/message) so no screen still uses a non-scrollable dropdown variant.",
-      "reqIds": [
-        "REQ-3"
       ],
       "version": 1
     }
@@ -36,12 +28,19 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Fix mobile name/character picker so the dropdown list scrolls vertically (up/down) and add a side scroll indicator/arrow to make scrolling affordance clear.",
+      "summary": "Enable scrolling through the friends/name list (up/down) and/or provide up/down arrow controls to navigate long lists.",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Audit all name/friend/character selection dropdowns and ensure they use the shared ScrollableSelectContent wrapper (or equivalent scroll-enabled SelectContent) so the long-list scrolling fix applies everywhere names are chosen (e.g., post author selector, comment author selector, story author selector, message sender selector).",
+      "reqIds": [
+        "REQ-3"
+      ],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
   "projectName": "ToonSpace",
   "clarification_mode": "instant",
   "clarification_rounds": 0

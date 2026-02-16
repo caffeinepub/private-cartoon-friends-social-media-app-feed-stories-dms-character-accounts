@@ -1,39 +1,31 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T20:59:33.332Z",
+  "generatedAt": "2026-02-16T23:02:31.818Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 3,
-    "implemented": 3,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Make the author/name selection dropdowns reliably scrollable on mobile (vertical up/down) so the list does not overflow the viewport and finger scrolling works to reach all names.",
+        "summary": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/ScrollableSelectContent.tsx",
-          "frontend/src/index.css",
-          "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/CommentsPanel.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx",
-          "frontend/src/components/MessageThread.tsx"
+          "frontend/src/index.css"
         ],
         "matchedFiles": [
           "frontend/src/components/ScrollableSelectContent.tsx",
-          "frontend/src/index.css",
-          "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/CommentsPanel.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx",
-          "frontend/src/components/MessageThread.tsx"
+          "frontend/src/index.css"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Add a clear scroll affordance to the open name dropdown list by showing a side scroll indicator/arrow controls when the list is scrollable.",
+        "summary": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/ScrollableSelectContent.tsx",
@@ -46,20 +38,15 @@
       },
       {
         "id": "REQ-3",
-        "summary": "Ensure the mobile scrolling fix applies to all existing user/character author selection Select components used when creating content (post/comment/story/message) so no screen still uses a non-scrollable dropdown variant.",
-        "status": "implemented",
+        "summary": "Audit all name/friend/character selection dropdowns and ensure they use the shared ScrollableSelectContent wrapper (or equivalent scroll-enabled SelectContent) so the long-list scrolling fix applies everywhere names are chosen (e.g., post author selector, comment author selector, story author selector, message sender selector).",
+        "status": "missing",
         "plannedFiles": [
           "frontend/src/components/PostComposer.tsx",
           "frontend/src/components/CommentsPanel.tsx",
           "frontend/src/components/CreateStoryDialog.tsx",
           "frontend/src/components/MessageThread.tsx"
         ],
-        "matchedFiles": [
-          "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/CommentsPanel.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx",
-          "frontend/src/components/MessageThread.tsx"
-        ]
+        "matchedFiles": []
       }
     ]
   },
@@ -68,10 +55,6 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/CommentsPanel.tsx",
-    "frontend/src/components/CreateStoryDialog.tsx",
-    "frontend/src/components/MessageThread.tsx",
-    "frontend/src/components/PostComposer.tsx",
     "frontend/src/components/ScrollableSelectContent.tsx",
     "frontend/src/index.css",
     "project_state.json",

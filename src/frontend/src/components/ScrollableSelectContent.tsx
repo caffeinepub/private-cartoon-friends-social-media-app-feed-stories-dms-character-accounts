@@ -8,9 +8,9 @@ interface ScrollableSelectContentProps {
 }
 
 export default function ScrollableSelectContent({ children, className = '' }: ScrollableSelectContentProps) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const [showTopIndicator, setShowTopIndicator] = useState(false);
-  const [showBottomIndicator, setShowBottomIndicator] = useState(false);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -18,8 +18,8 @@ export default function ScrollableSelectContent({ children, className = '' }: Sc
 
     const checkScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = viewport;
-      setShowTopIndicator(scrollTop > 10);
-      setShowBottomIndicator(scrollTop + clientHeight < scrollHeight - 10);
+      setCanScrollUp(scrollTop > 5);
+      setCanScrollDown(scrollTop + clientHeight < scrollHeight - 5);
     };
 
     // Initial check after a brief delay to ensure content is rendered
@@ -46,25 +46,25 @@ export default function ScrollableSelectContent({ children, className = '' }: Sc
           // Find the viewport element inside SelectContent
           const viewport = node.querySelector('[data-radix-select-viewport]') as HTMLDivElement;
           if (viewport) {
-            (viewportRef as any).current = viewport;
+            viewportRef.current = viewport;
           }
         }
       }}
     >
-      {/* Top scroll indicator */}
-      {showTopIndicator && (
-        <div className="scroll-indicator scroll-indicator-top">
-          <ChevronUp className="h-4 w-4" />
-        </div>
+      {/* Radix SelectScrollUpButton - functional scroll button */}
+      {canScrollUp && (
+        <SelectScrollUpButton className="flex items-center justify-center h-8 bg-gradient-to-b from-popover to-transparent cursor-pointer hover:bg-accent/20 transition-colors">
+          <ChevronUp className="h-4 w-4 text-primary" />
+        </SelectScrollUpButton>
       )}
 
       {children}
 
-      {/* Bottom scroll indicator */}
-      {showBottomIndicator && (
-        <div className="scroll-indicator scroll-indicator-bottom">
-          <ChevronDown className="h-4 w-4" />
-        </div>
+      {/* Radix SelectScrollDownButton - functional scroll button */}
+      {canScrollDown && (
+        <SelectScrollDownButton className="flex items-center justify-center h-8 bg-gradient-to-t from-popover to-transparent cursor-pointer hover:bg-accent/20 transition-colors">
+          <ChevronDown className="h-4 w-4 text-primary" />
+        </SelectScrollDownButton>
       )}
     </SelectContent>
   );
