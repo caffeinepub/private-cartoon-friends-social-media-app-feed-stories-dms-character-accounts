@@ -4,10 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Image, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { ExternalBlob } from '../backend';
+import ScrollableSelectContent from './ScrollableSelectContent';
 
 interface CreateStoryDialogProps {
   open: boolean;
@@ -84,14 +85,14 @@ export default function CreateStoryDialog({ open, onOpenChange }: CreateStoryDia
               <SelectTrigger className="rounded-xl">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <ScrollableSelectContent>
                 <SelectItem value="user">You</SelectItem>
                 {characters?.map((char) => (
                   <SelectItem key={char.id} value={char.id}>
                     {char.name}
                   </SelectItem>
                 ))}
-              </SelectContent>
+              </ScrollableSelectContent>
             </Select>
           </div>
 

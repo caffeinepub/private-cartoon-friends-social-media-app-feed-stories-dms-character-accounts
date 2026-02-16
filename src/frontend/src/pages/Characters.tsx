@@ -76,7 +76,12 @@ export default function Characters() {
             <Card key={character.id} className="rounded-3xl border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg">
               <CardHeader>
                 <div className="flex items-start gap-4">
-                  <AvatarImage avatar={character.avatar} name={character.name} size="lg" />
+                  <AvatarImage 
+                    avatar={character.avatar} 
+                    name={character.name} 
+                    size="lg"
+                    avatarTimestamp={character.avatarTimestamp}
+                  />
                   <div className="flex-1">
                     <CardTitle className="text-xl font-black">{character.name}</CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">{character.bio || 'No bio yet'}</p>

@@ -49,6 +49,8 @@ export function useGetCharacterProfiles() {
       return actor.getCharacterProfiles();
     },
     enabled: !!actor && !isFetching,
+    staleTime: 0, // Treat data as immediately stale
+    refetchOnMount: true,
   });
 }
 
@@ -61,8 +63,8 @@ export function useCreateCharacter() {
       if (!actor) throw new Error('Actor not available');
       return actor.createCharacter(name, bio);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['characters'] });
     },
   });
 }
@@ -76,8 +78,8 @@ export function useUpdateCharacter() {
       if (!actor) throw new Error('Actor not available');
       return actor.updateCharacter(characterId, name, bio);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['characters'] });
     },
   });
 }
@@ -91,8 +93,8 @@ export function useUploadAvatar() {
       if (!actor) throw new Error('Actor not available');
       return actor.uploadAvatar(characterId, image);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['characters'] });
     },
   });
 }
@@ -106,8 +108,8 @@ export function useDeleteCharacter() {
       if (!actor) throw new Error('Actor not available');
       return actor.deleteCharacter(characterId);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['characters'] });
     },
   });
 }

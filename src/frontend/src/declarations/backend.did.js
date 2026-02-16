@@ -33,6 +33,7 @@ export const UserProfile = IDL.Record({
 export const CharacterProfileView = IDL.Record({
   'id' : IDL.Text,
   'bio' : IDL.Text,
+  'avatarTimestamp' : IDL.Int,
   'owner' : IDL.Principal,
   'name' : IDL.Text,
   'followers' : IDL.Vec(IDL.Text),
@@ -176,6 +177,7 @@ export const idlFactory = ({ IDL }) => {
   const CharacterProfileView = IDL.Record({
     'id' : IDL.Text,
     'bio' : IDL.Text,
+    'avatarTimestamp' : IDL.Int,
     'owner' : IDL.Principal,
     'name' : IDL.Text,
     'followers' : IDL.Vec(IDL.Text),

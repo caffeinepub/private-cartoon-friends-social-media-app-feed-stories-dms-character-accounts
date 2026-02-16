@@ -3,12 +3,12 @@ import { ConversationView } from '../backend';
 import { useSendMessage, useGetCharacterProfiles, useGetCallerUserProfile, useGetConversation } from '../hooks/useQueries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, Send } from 'lucide-react';
 import AvatarImage from './AvatarImage';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from 'sonner';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import ScrollableSelectContent from './ScrollableSelectContent';
 
 interface MessageThreadProps {
   conversation: ConversationView;
@@ -94,21 +94,13 @@ export default function MessageThread({ conversation, onBack }: MessageThreadPro
             const timestamp = new Date(Number(message.timestamp) / 1_000_000);
             const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true });
 
-            const isUser = message.sender === 'user';
-
             return (
-              <div key={message.id} className={`flex gap-2 ${isUser ? 'flex-row-reverse' : ''}`}>
+              <div key={message.id} className="flex gap-2">
                 <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="sm" />
-                <div className={`flex-1 max-w-[70%] ${isUser ? 'items-end' : ''}`}>
-                  <div className={`rounded-2xl p-3 ${
-                    isUser 
-                      ? 'bg-gradient-to-r from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] text-white' 
-                      : 'bg-accent'
-                  }`}>
-                    {!isUser && <p className="text-xs font-semibold mb-1">{author?.name || 'Unknown'}</p>}
-                    <p className="text-sm">{message.content}</p>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1 px-2">{timeAgo}</p>
+                <div className="flex-1 bg-accent/50 rounded-2xl p-3">
+                  <p className="text-sm font-semibold">{author?.name || 'Unknown'}</p>
+                  <p className="text-sm text-foreground">{message.content}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{timeAgo}</p>
                 </div>
               </div>
             );
@@ -116,21 +108,21 @@ export default function MessageThread({ conversation, onBack }: MessageThreadPro
         )}
       </div>
 
-      {/* Input */}
+      {/* Send Message Form */}
       <div className="bg-card rounded-b-3xl p-4 border-4 border-t-0 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Select value={senderId} onValueChange={setSenderId}>
             <SelectTrigger className="w-32 rounded-xl">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <ScrollableSelectContent>
               <SelectItem value="user">You</SelectItem>
               {characters?.map((char) => (
                 <SelectItem key={char.id} value={char.id}>
                   {char.name}
                 </SelectItem>
               ))}
-            </SelectContent>
+            </ScrollableSelectContent>
           </Select>
 
           <Input
@@ -143,7 +135,7 @@ export default function MessageThread({ conversation, onBack }: MessageThreadPro
           <Button
             type="submit"
             size="icon"
-            className="rounded-full bg-gradient-to-r from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)]"
+            className="rounded-full"
             disabled={sendMessage.isPending || !content.trim()}
           >
             <Send className="h-4 w-4" />

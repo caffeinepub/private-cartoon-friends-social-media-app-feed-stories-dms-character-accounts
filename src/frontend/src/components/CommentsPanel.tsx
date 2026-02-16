@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useGetComments, useCreateComment, useGetCharacterProfiles, useGetCallerUserProfile } from '../hooks/useQueries';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Send } from 'lucide-react';
 import AvatarImage from './AvatarImage';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from 'sonner';
+import ScrollableSelectContent from './ScrollableSelectContent';
 
 interface CommentsPanelProps {
   postId: string;
@@ -77,14 +78,14 @@ export default function CommentsPanel({ postId }: CommentsPanelProps) {
           <SelectTrigger className="w-32 rounded-xl">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <ScrollableSelectContent>
             <SelectItem value="user">You</SelectItem>
             {characters?.map((char) => (
               <SelectItem key={char.id} value={char.id}>
                 {char.name}
               </SelectItem>
             ))}
-          </SelectContent>
+          </ScrollableSelectContent>
         </Select>
 
         <Input

@@ -1,321 +1,79 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-12T00:25:11.045Z",
+  "generatedAt": "2026-02-16T20:59:33.332Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 11,
-    "implemented": 10,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add Internet Identity sign-in and gate the entire app behind authentication so only the signed-in user can access the social network features.",
+        "summary": "Make the author/name selection dropdowns reliably scrollable on mobile (vertical up/down) so the list does not overflow the viewport and finger scrolling works to reach all names.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/SignIn.tsx",
-          "frontend/src/components/AppShell.tsx",
-          "frontend/src/components/AuthButton.tsx",
-          "frontend/src/main.tsx"
+          "frontend/src/components/ScrollableSelectContent.tsx",
+          "frontend/src/index.css",
+          "frontend/src/components/PostComposer.tsx",
+          "frontend/src/components/CommentsPanel.tsx",
+          "frontend/src/components/CreateStoryDialog.tsx",
+          "frontend/src/components/MessageThread.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/SignIn.tsx",
-          "frontend/src/components/AppShell.tsx",
-          "frontend/src/main.tsx"
-        ]
-      },
-      {
-        "id": "REQ-10",
-        "summary": "Add basic safety/guardrails in UX copy: clarify that the app is private and that users should only upload content they have rights to use (no bundled copyrighted character assets).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/SignIn.tsx",
-          "frontend/src/components/CharacterFormDialog.tsx",
-          "frontend/src/pages/Profile.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/SignIn.tsx",
-          "frontend/src/components/CharacterFormDialog.tsx",
-          "frontend/src/pages/Profile.tsx"
-        ]
-      },
-      {
-        "id": "REQ-11",
-        "summary": "Generate and include static branding assets for the app (logo and background pattern) and wire them into the UI (login screen and app shell).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/assets/generated/logo.dim_512x512.png",
-          "frontend/public/assets/generated/background-tile.dim_1024x1024.png",
-          "frontend/public/assets/generated/default-avatar.dim_256x256.png",
-          "frontend/src/pages/SignIn.tsx",
-          "frontend/src/components/AppShell.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/public/assets/generated/logo.dim_512x512.png",
-          "frontend/public/assets/generated/background-tile.dim_1024x1024.png",
-          "frontend/public/assets/generated/default-avatar.dim_256x256.png",
-          "frontend/src/pages/SignIn.tsx",
-          "frontend/src/components/AppShell.tsx"
+          "frontend/src/components/ScrollableSelectContent.tsx",
+          "frontend/src/index.css",
+          "frontend/src/components/PostComposer.tsx",
+          "frontend/src/components/CommentsPanel.tsx",
+          "frontend/src/components/CreateStoryDialog.tsx",
+          "frontend/src/components/MessageThread.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Implement backend data models and APIs for a private social app: user profile, character profiles, follow/friend links, posts, comments, reactions (like), stories (ephemeral), and direct messages, all scoped to the authenticated user’s private space.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "summary": "Add a clear scroll affordance to the open name dropdown list by showing a side scroll indicator/arrow controls when the list is scrollable.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ScrollableSelectContent.tsx",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ScrollableSelectContent.tsx",
+          "frontend/src/index.css"
+        ]
       },
       {
         "id": "REQ-3",
-        "summary": "Create a Character Directory feature where the signed-in user can create, edit, and manage their cartoon-character friend profiles (name, bio, avatar image) without shipping any copyrighted character assets by default.",
+        "summary": "Ensure the mobile scrolling fix applies to all existing user/character author selection Select components used when creating content (post/comment/story/message) so no screen still uses a non-scrollable dropdown variant.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/Characters.tsx",
-          "frontend/src/components/CharacterFormDialog.tsx",
-          "frontend/src/components/AvatarImage.tsx",
-          "frontend/src/hooks/characters.ts",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Characters.tsx",
-          "frontend/src/components/CharacterFormDialog.tsx",
-          "frontend/src/components/AvatarImage.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Implement a Home Feed experience similar to Facebook/Instagram: create post composer, feed list, post detail view, comments, and likes; allow selecting the author (the user or one of the user’s character profiles) when creating a post.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/HomeFeed.tsx",
           "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/PostCard.tsx",
-          "frontend/src/pages/PostDetail.tsx",
           "frontend/src/components/CommentsPanel.tsx",
-          "frontend/src/hooks/posts.ts",
-          "frontend/src/App.tsx"
+          "frontend/src/components/CreateStoryDialog.tsx",
+          "frontend/src/components/MessageThread.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/HomeFeed.tsx",
           "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/PostCard.tsx",
           "frontend/src/components/CommentsPanel.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Implement a Stories feature similar to Snapchat/Instagram: create story with optional image + caption; display active stories at the top of the app; stories automatically disappear after a configured TTL (e.g., 24 hours).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/StoriesRow.tsx",
           "frontend/src/components/CreateStoryDialog.tsx",
-          "frontend/src/components/StoryViewerDialog.tsx",
-          "frontend/src/hooks/stories.ts",
-          "frontend/src/pages/HomeFeed.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/StoriesRow.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx",
-          "frontend/src/components/StoryViewerDialog.tsx",
-          "frontend/src/pages/HomeFeed.tsx"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Implement Direct Messages similar to Instagram DMs: conversation list, thread view, and send message; support conversations between the user and any character profile, and allow posting messages as either the user or a selected character profile.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/Messages.tsx",
-          "frontend/src/pages/MessageThread.tsx",
-          "frontend/src/components/MessageComposer.tsx",
-          "frontend/src/hooks/messages.ts",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Messages.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Add navigation and core screens: Home (Feed), Stories, Messages, Characters, and Profile/Settings (for the signed-in user).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/PrimaryNav.tsx",
-          "frontend/src/pages/Profile.tsx",
-          "frontend/src/components/ProfileSetupDialog.tsx",
-          "frontend/src/hooks/profile.ts",
-          "frontend/src/components/AppShell.tsx",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/Profile.tsx",
-          "frontend/src/components/ProfileSetupDialog.tsx",
-          "frontend/src/components/AppShell.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-8",
-        "summary": "Define a cohesive visual theme for the app and apply it consistently across all screens (colors, typography, spacing, and component styling). Theme should feel nostalgic/retro (90s/2000s-inspired) without using default blue/purple gradients.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js",
-          "frontend/src/components/AppShell.tsx",
-          "frontend/src/pages/SignIn.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js",
-          "frontend/src/components/AppShell.tsx",
-          "frontend/src/pages/SignIn.tsx"
-        ]
-      },
-      {
-        "id": "REQ-9",
-        "summary": "Add local image handling for avatars, post images, and story images: store uploaded images in a canister-friendly way and render them in the UI with appropriate sizing/cropping.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/utils/images.ts",
-          "frontend/src/components/ImageCropFrame.tsx",
-          "frontend/src/components/AvatarImage.tsx",
-          "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AvatarImage.tsx",
-          "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx"
+          "frontend/src/components/MessageThread.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/authorization/MixinAuthorization.mo",
-    "backend/authorization/access-control.mo",
-    "backend/blob-storage/Mixin.mo",
-    "backend/blob-storage/Storage.mo",
-    "backend/main.mo",
     "build-request.json",
-    "build-template/Dockerfile",
-    "build-template/LICENSE",
-    "build-template/README.md",
-    "build-template/deploy.sh",
-    "build-template/icp.yaml",
-    "build-template/package.json",
-    "build-template/pnpm-lock.yaml",
-    "build-template/pnpm-workspace.yaml",
-    "build-template/scripts/prune-unused-images.js",
-    "build-template/scripts/resize-images.js",
-    "build-template/src/backend/canister.yaml",
-    "build-template/src/backend/system-idl/aaaaa-aa.did",
-    "build-template/src/frontend/canister.yaml",
-    "build-template/src/frontend/components.json",
-    "build-template/src/frontend/env.json",
-    "build-template/src/frontend/eslint-rules/no-bigint-in-query-keys.js",
-    "build-template/src/frontend/eslint-rules/require-internet-identity-provider.js",
-    "build-template/src/frontend/eslint.config.js",
-    "build-template/src/frontend/package.json",
-    "build-template/src/frontend/postcss.config.js",
-    "build-template/src/frontend/src/components/ui/accordion.tsx",
-    "build-template/src/frontend/src/components/ui/alert-dialog.tsx",
-    "build-template/src/frontend/src/components/ui/alert.tsx",
-    "build-template/src/frontend/src/components/ui/aspect-ratio.tsx",
-    "build-template/src/frontend/src/components/ui/avatar.tsx",
-    "build-template/src/frontend/src/components/ui/badge.tsx",
-    "build-template/src/frontend/src/components/ui/breadcrumb.tsx",
-    "build-template/src/frontend/src/components/ui/button.tsx",
-    "build-template/src/frontend/src/components/ui/calendar.tsx",
-    "build-template/src/frontend/src/components/ui/card.tsx",
-    "build-template/src/frontend/src/components/ui/carousel.tsx",
-    "build-template/src/frontend/src/components/ui/chart.tsx",
-    "build-template/src/frontend/src/components/ui/checkbox.tsx",
-    "build-template/src/frontend/src/components/ui/collapsible.tsx",
-    "build-template/src/frontend/src/components/ui/command.tsx",
-    "build-template/src/frontend/src/components/ui/context-menu.tsx",
-    "build-template/src/frontend/src/components/ui/dialog.tsx",
-    "build-template/src/frontend/src/components/ui/drawer.tsx",
-    "build-template/src/frontend/src/components/ui/dropdown-menu.tsx",
-    "build-template/src/frontend/src/components/ui/form.tsx",
-    "build-template/src/frontend/src/components/ui/hover-card.tsx",
-    "build-template/src/frontend/src/components/ui/input-otp.tsx",
-    "build-template/src/frontend/src/components/ui/input.tsx",
-    "build-template/src/frontend/src/components/ui/label.tsx",
-    "build-template/src/frontend/src/components/ui/menubar.tsx",
-    "build-template/src/frontend/src/components/ui/navigation-menu.tsx",
-    "build-template/src/frontend/src/components/ui/pagination.tsx",
-    "build-template/src/frontend/src/components/ui/popover.tsx",
-    "build-template/src/frontend/src/components/ui/progress.tsx",
-    "build-template/src/frontend/src/components/ui/radio-group.tsx",
-    "build-template/src/frontend/src/components/ui/resizable.tsx",
-    "build-template/src/frontend/src/components/ui/scroll-area.tsx",
-    "build-template/src/frontend/src/components/ui/select.tsx",
-    "build-template/src/frontend/src/components/ui/separator.tsx",
-    "build-template/src/frontend/src/components/ui/sheet.tsx",
-    "build-template/src/frontend/src/components/ui/sidebar.tsx",
-    "build-template/src/frontend/src/components/ui/skeleton.tsx",
-    "build-template/src/frontend/src/components/ui/slider.tsx",
-    "build-template/src/frontend/src/components/ui/sonner.tsx",
-    "build-template/src/frontend/src/components/ui/switch.tsx",
-    "build-template/src/frontend/src/components/ui/table.tsx",
-    "build-template/src/frontend/src/components/ui/tabs.tsx",
-    "build-template/src/frontend/src/components/ui/textarea.tsx",
-    "build-template/src/frontend/src/components/ui/toggle-group.tsx",
-    "build-template/src/frontend/src/components/ui/toggle.tsx",
-    "build-template/src/frontend/src/components/ui/tooltip.tsx",
-    "build-template/src/frontend/src/hooks/use-mobile.tsx",
-    "build-template/src/frontend/src/lib/utils.ts",
-    "build-template/src/frontend/tsconfig.json",
-    "build-template/src/frontend/vite.config.js",
-    "build-template/tsconfig.json",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/index.css",
-    "frontend/index.html",
-    "frontend/public/assets/generated/background-tile.dim_1024x1024.png",
-    "frontend/public/assets/generated/default-avatar.dim_256x256.png",
-    "frontend/public/assets/generated/logo.dim_512x512.png",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AppShell.tsx",
-    "frontend/src/components/AvatarImage.tsx",
-    "frontend/src/components/CharacterFormDialog.tsx",
     "frontend/src/components/CommentsPanel.tsx",
-    "frontend/src/components/CreateConversationDialog.tsx",
     "frontend/src/components/CreateStoryDialog.tsx",
     "frontend/src/components/MessageThread.tsx",
-    "frontend/src/components/PostCard.tsx",
     "frontend/src/components/PostComposer.tsx",
-    "frontend/src/components/ProfileSetupDialog.tsx",
-    "frontend/src/components/StoriesRow.tsx",
-    "frontend/src/components/StoryViewerDialog.tsx",
-    "frontend/src/config.ts",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/components/ScrollableSelectContent.tsx",
     "frontend/src/index.css",
-    "frontend/src/main.tsx",
-    "frontend/src/pages/Characters.tsx",
-    "frontend/src/pages/HomeFeed.tsx",
-    "frontend/src/pages/Messages.tsx",
-    "frontend/src/pages/Profile.tsx",
-    "frontend/src/pages/SignIn.tsx",
-    "frontend/src/ui-summary.json",
-    "frontend/src/utils/StorageClient.ts",
-    "frontend/src/utils/urlParams.ts",
-    "frontend/tailwind.config.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

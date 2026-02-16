@@ -13,6 +13,7 @@ import type { Principal } from '@icp-sdk/core/principal';
 export interface CharacterProfileView {
   'id' : string,
   'bio' : string,
+  'avatarTimestamp' : bigint,
   'owner' : Principal,
   'name' : string,
   'followers' : Array<string>,

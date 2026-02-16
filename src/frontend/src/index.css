@@ -118,3 +118,50 @@
 ::-webkit-scrollbar-thumb:hover {
     background: oklch(var(--primary));
 }
+
+/* Scrollable Select Content - Mobile-friendly dropdown */
+.scrollable-select-content {
+    position: relative;
+}
+
+.scrollable-select-content [data-radix-select-viewport] {
+    max-height: 40vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+}
+
+/* Scroll indicators for dropdowns */
+.scroll-indicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(to bottom, oklch(var(--popover)), transparent);
+    color: oklch(var(--primary));
+}
+
+.scroll-indicator-top {
+    top: 0;
+    background: linear-gradient(to bottom, oklch(var(--popover)), transparent);
+}
+
+.scroll-indicator-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, oklch(var(--popover)), transparent);
+}
+
+.dark .scroll-indicator-top {
+    background: linear-gradient(to bottom, oklch(var(--popover)), transparent);
+}
+
+.dark .scroll-indicator-bottom {
+    background: linear-gradient(to top, oklch(var(--popover)), transparent);
+}

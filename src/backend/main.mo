@@ -4,11 +4,14 @@ import Time "mo:core/Time";
 import Array "mo:core/Array";
 import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
+
 import Principal "mo:core/Principal";
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
+
+// Run migration as specified in with clause
 
 actor {
   let accessControlState = AccessControl.initState();
@@ -20,25 +23,6 @@ actor {
     name : Text;
     bio : Text;
     avatar : ?Storage.ExternalBlob;
-  };
-
-  // Internal mutable data type
-  type CharacterProfile = {
-    id : Text;
-    name : Text;
-    bio : Text;
-    avatar : ?Storage.ExternalBlob;
-    followers : [Text];
-    owner : Principal;
-  };
-
-  public type CharacterProfileView = {
-    id : Text;
-    name : Text;
-    bio : Text;
-    avatar : ?Storage.ExternalBlob;
-    followers : [Text];
-    owner : Principal;
   };
 
   // Internal persistent data type
@@ -134,6 +118,27 @@ actor {
     profileOwner : Principal;
   };
 
+  // Updated persistent data type with avatarTimestamp field
+  type CharacterProfile = {
+    id : Text;
+    name : Text;
+    bio : Text;
+    avatar : ?Storage.ExternalBlob;
+    followers : [Text];
+    owner : Principal;
+    avatarTimestamp : Int; // Added field
+  };
+
+  public type CharacterProfileView = {
+    id : Text;
+    name : Text;
+    bio : Text;
+    avatar : ?Storage.ExternalBlob;
+    followers : [Text];
+    owner : Principal;
+    avatarTimestamp : Int; // Added field
+  };
+
   // Persistent state with persistent arrays
   let userProfiles = Map.empty<Principal, UserProfile>();
   let characterProfiles = Map.empty<Text, CharacterProfile>();
@@ -164,7 +169,7 @@ actor {
     userProfiles.add(caller, profile);
   };
 
-  // Character Directory API
+  // Persistent Character Directory API
   public shared ({ caller }) func createCharacter(name : Text, bio : Text) : async Text {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can create characters");
@@ -178,6 +183,7 @@ actor {
       avatar = null;
       followers = [];
       owner = caller;
+      avatarTimestamp = Time.now();
     };
 
     characterProfiles.add(id, character);
@@ -213,7 +219,7 @@ actor {
         if (c.owner != caller) {
           Runtime.trap("Unauthorized: Can only update your own characters");
         };
-        let updated = { c with avatar = ?image };
+        let updated = { c with avatar = ?image; avatarTimestamp = Time.now() };
         characterProfiles.add(characterId, updated);
       };
       case (null) { Runtime.trap("Character not found") };
@@ -488,6 +494,7 @@ actor {
           avatar = c.avatar;
           followers = c.followers;
           owner = c.owner;
+          avatarTimestamp = c.avatarTimestamp;
         };
       }
     );

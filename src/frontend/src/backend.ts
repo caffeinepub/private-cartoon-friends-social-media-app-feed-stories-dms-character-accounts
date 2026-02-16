@@ -100,6 +100,7 @@ export interface CommentView {
 export interface CharacterProfileView {
     id: string;
     bio: string;
+    avatarTimestamp: bigint;
     owner: Principal;
     name: string;
     followers: Array<string>;
@@ -682,6 +683,7 @@ async function from_candid_record_n14(_uploadFile: (file: ExternalBlob) => Promi
 async function from_candid_record_n21(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     id: string;
     bio: string;
+    avatarTimestamp: bigint;
     owner: Principal;
     name: string;
     followers: Array<string>;
@@ -689,6 +691,7 @@ async function from_candid_record_n21(_uploadFile: (file: ExternalBlob) => Promi
 }): Promise<{
     id: string;
     bio: string;
+    avatarTimestamp: bigint;
     owner: Principal;
     name: string;
     followers: Array<string>;
@@ -697,6 +700,7 @@ async function from_candid_record_n21(_uploadFile: (file: ExternalBlob) => Promi
     return {
         id: value.id,
         bio: value.bio,
+        avatarTimestamp: value.avatarTimestamp,
         owner: value.owner,
         name: value.name,
         followers: value.followers,

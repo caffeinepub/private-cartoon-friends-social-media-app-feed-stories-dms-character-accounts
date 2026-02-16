@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useCreatePost, useGetCharacterProfiles } from '../hooks/useQueries';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Image, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { ExternalBlob } from '../backend';
+import ScrollableSelectContent from './ScrollableSelectContent';
 
 export default function PostComposer() {
   const [content, setContent] = useState('');
@@ -71,14 +72,14 @@ export default function PostComposer() {
             <SelectTrigger className="rounded-xl">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <ScrollableSelectContent>
               <SelectItem value="user">You</SelectItem>
               {characters?.map((char) => (
                 <SelectItem key={char.id} value={char.id}>
                   {char.name}
                 </SelectItem>
               ))}
-            </SelectContent>
+            </ScrollableSelectContent>
           </Select>
         </div>
 

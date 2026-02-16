@@ -21,6 +21,8 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
   const [bio, setBio] = useState('');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [savingStep, setSavingStep] = useState<'idle' | 'details' | 'avatar'>('idle');
 
   const createCharacter = useCreateCharacter();
   const updateCharacter = useUpdateCharacter();
@@ -30,13 +32,15 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
     if (character) {
       setName(character.name);
       setBio(character.bio);
-      setAvatarPreview(character.avatar?.getDirectURL() || null);
+      setAvatarPreview(null);
     } else {
       setName('');
       setBio('');
       setAvatarFile(null);
       setAvatarPreview(null);
     }
+    setSavingStep('idle');
+    setUploadProgress(0);
   }, [character, open]);
 
   const handleAvatarSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,26 +67,31 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
     try {
       let characterId = character?.id;
 
+      // Step 1: Save character details
+      setSavingStep('details');
       if (character) {
-        // Update existing character
         await updateCharacter.mutateAsync({
           characterId: character.id,
           name: name.trim(),
           bio: bio.trim()
         });
       } else {
-        // Create new character
         characterId = await createCharacter.mutateAsync({
           name: name.trim(),
           bio: bio.trim()
         });
       }
 
-      // Upload avatar if provided
+      // Step 2: Upload avatar if provided
       if (avatarFile && characterId) {
+        setSavingStep('avatar');
+        setUploadProgress(0);
+        
         const arrayBuffer = await avatarFile.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
-        const imageBlob = ExternalBlob.fromBytes(uint8Array);
+        const imageBlob = ExternalBlob.fromBytes(uint8Array).withUploadProgress((percentage) => {
+          setUploadProgress(percentage);
+        });
 
         await uploadAvatar.mutateAsync({
           characterId,
@@ -90,12 +99,20 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
         });
       }
 
+      setSavingStep('idle');
       toast.success(character ? 'Character updated! ✨' : 'Character created! 🎉');
       onOpenChange(false);
-    } catch (error) {
-      toast.error(character ? 'Failed to update character' : 'Failed to create character');
+    } catch (error: any) {
+      setSavingStep('idle');
+      const errorMessage = error?.message || (character ? 'Failed to update character' : 'Failed to create character');
+      toast.error(errorMessage);
     }
   };
+
+  const isSaving = savingStep !== 'idle';
+  const displayAvatar = avatarPreview 
+    ? { getDirectURL: () => avatarPreview } as ExternalBlob
+    : character?.avatar;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,9 +126,10 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col items-center gap-4">
             <AvatarImage 
-              avatar={avatarPreview ? { getDirectURL: () => avatarPreview } as any : character?.avatar} 
+              avatar={displayAvatar} 
               name={name || 'Character'} 
-              size="xl" 
+              size="xl"
+              avatarTimestamp={character?.avatarTimestamp}
             />
             <input
               type="file"
@@ -119,6 +137,7 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
               onChange={handleAvatarSelect}
               className="hidden"
               id="character-avatar"
+              disabled={isSaving}
             />
             <Button
               type="button"
@@ -126,6 +145,7 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
               size="sm"
               className="rounded-full"
               onClick={() => document.getElementById('character-avatar')?.click()}
+              disabled={isSaving}
             >
               <Upload className="mr-2 h-4 w-4" />
               {character?.avatar || avatarPreview ? 'Change Avatar' : 'Upload Avatar'}
@@ -140,6 +160,7 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., SpongeBob, Tommy Pickles"
               className="rounded-xl"
+              disabled={isSaving}
             />
           </div>
 
@@ -152,6 +173,7 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
               placeholder="Tell us about this character..."
               className="rounded-xl resize-none"
               rows={3}
+              disabled={isSaving}
             />
           </div>
 
@@ -159,12 +181,39 @@ export default function CharacterFormDialog({ open, onOpenChange, character }: C
             ⚠️ Only upload content you own or have permission to use. Do not use copyrighted images without authorization.
           </div>
 
+          {isSaving && (
+            <div className="bg-primary/10 rounded-xl p-3 text-sm">
+              {savingStep === 'details' && (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                  <span>Saving character details...</span>
+                </div>
+              )}
+              {savingStep === 'avatar' && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                    <span>Uploading avatar... {uploadProgress}%</span>
+                  </div>
+                  {uploadProgress > 0 && (
+                    <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="bg-primary h-full transition-all duration-300"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           <Button
             type="submit"
             className="w-full rounded-full font-bold bg-gradient-to-r from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] hover:from-[oklch(0.60_0.24_330)] hover:to-[oklch(0.65_0.22_60)]"
-            disabled={createCharacter.isPending || updateCharacter.isPending || uploadAvatar.isPending}
+            disabled={isSaving}
           >
-            {createCharacter.isPending || updateCharacter.isPending || uploadAvatar.isPending ? (
+            {isSaving ? (
               <>
                 <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 Saving...
