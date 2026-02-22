@@ -67,6 +67,14 @@ export interface UserProfile {
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface VideoView {
+  'id' : string,
+  'video' : ExternalBlob,
+  'author' : string,
+  'timestamp' : bigint,
+  'caption' : string,
+  'profileOwner' : Principal,
+}
 export interface _CaffeineStorageCreateCertificateResult {
   'method' : string,
   'blob_hash' : string,
@@ -101,9 +109,11 @@ export interface _SERVICE {
   'createConversation' : ActorMethod<[Array<string>], string>,
   'createPost' : ActorMethod<[string, string, [] | [ExternalBlob]], string>,
   'createStory' : ActorMethod<[string, ExternalBlob, string], string>,
+  'createVideo' : ActorMethod<[string, ExternalBlob, string], string>,
   'deleteCharacter' : ActorMethod<[string], undefined>,
   'deletePost' : ActorMethod<[string], undefined>,
   'deleteStory' : ActorMethod<[string], undefined>,
+  'deleteVideo' : ActorMethod<[string], undefined>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getCharacterProfiles' : ActorMethod<[], Array<CharacterProfileView>>,
@@ -113,6 +123,7 @@ export interface _SERVICE {
   'getPosts' : ActorMethod<[], Array<PostView>>,
   'getStories' : ActorMethod<[], Array<StoryView>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getVideos' : ActorMethod<[], Array<VideoView>>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'likePost' : ActorMethod<[string], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,

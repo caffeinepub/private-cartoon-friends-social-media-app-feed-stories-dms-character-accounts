@@ -41,10 +41,8 @@ export default function CreateConversationDialog({
     }
 
     try {
-      const conversationId = await createConversation.mutateAsync(['user', ...selectedCharacters]);
+      await createConversation.mutateAsync(['user', ...selectedCharacters]);
       
-      // Fetch the created conversation to pass to parent
-      // For now, we'll just close and let the parent refresh
       toast.success('Conversation created! 🎉');
       onOpenChange(false);
       setSelectedCharacters([]);

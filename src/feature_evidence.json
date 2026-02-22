@@ -2,11 +2,15 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-custom-select-dropdown-used-for-long-name-lists-so-users-can-reliably-reach-any-name-by-scrolling-vertically-mouse-wheel-trackpad-and-touch-drag-and-by-clicking-tapping-explicit-up-down-arrow-controls-when-the-list-overflows",
-      "featureTitle": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
+      "featureId": "feature-add-ability-to-create-and-post-video-content-with-captions-and-author-selection-user-or-character",
+      "featureTitle": "Add ability to create and post video content with captions and author selection (user or character)",
       "files": [
-        "frontend/src/components/ScrollableSelectContent.tsx",
-        "frontend/src/index.css"
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/components/VideoCard.tsx",
+        "frontend/src/components/VideoComposer.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/HomeFeed.tsx",
+        "frontend/src/pages/Videos.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -23,11 +27,14 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-the-up-down-arrow-controls-inside-the-scrollable-select-dropdown-by-using-the-existing-radix-select-scroll-button-components-already-imported-in-scrollableselectcontent-and-ensure-they-are-only-shown-when-scrolling-is-possible-in-that-direction",
-      "featureTitle": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
+      "featureId": "feature-implement-live-streaming-capability-for-the-user-and-their-character-friends-to-broadcast-live-video",
+      "featureTitle": "Implement live streaming capability for the user and their character friends to broadcast live video",
       "files": [
-        "frontend/src/components/ScrollableSelectContent.tsx",
-        "frontend/src/index.css"
+        "frontend/src/components/LiveStreamCard.tsx",
+        "frontend/src/components/LiveStreamDialog.tsx",
+        "frontend/src/components/LiveStreamViewer.tsx",
+        "frontend/src/pages/HomeFeed.tsx",
+        "frontend/src/pages/Videos.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -40,6 +47,29 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-fix-the-messaging-functionality-so-conversations-and-message-sending-work-reliably",
+      "featureTitle": "Fix the messaging functionality so conversations and message sending work reliably",
+      "files": [
+        "frontend/src/components/CreateConversationDialog.tsx",
+        "frontend/src/components/MessageThread.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/Messages.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

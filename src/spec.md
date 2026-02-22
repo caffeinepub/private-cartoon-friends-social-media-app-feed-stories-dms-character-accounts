@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make long name/friend selection dropdowns reliably scrollable and navigable so users can reach any name.
+**Goal:** Add video posting and live streaming capabilities, and fix messaging functionality.
 
 **Planned changes:**
-- Update the shared custom Select dropdown content used for long lists to support vertical scrolling via mouse wheel/trackpad on desktop and touch-drag scrolling on touch devices.
-- Add functional Up/Down arrow scroll controls inside the dropdown using the existing Radix select scroll button components already imported in `ScrollableSelectContent`, showing them only when scrolling is possible in that direction.
-- Audit all name/friend/character selectors across the app and ensure they use the shared `ScrollableSelectContent` (or equivalent scroll-enabled SelectContent) so the fix applies everywhere names are chosen (e.g., post/comment/story author and message sender selectors) without breaking selection behavior.
+- Add video upload and playback for posts with author selection (user or character)
+- Implement live streaming for users and characters with viewer support
+- Fix messaging to ensure conversations load, messages send reliably, and history persists
 
-**User-visible outcome:** Users can scroll through long name lists (wheel/trackpad/touch drag) and use Up/Down arrows to move through the list, allowing them to reach and select names at the top or bottom without the dropdown getting stuck.
+**User-visible outcome:** Users can post videos with captions, go live or watch live streams from characters, and send/receive messages without errors.

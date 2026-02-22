@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useGetConversations, useCreateConversation, useGetCharacterProfiles } from '../hooks/useQueries';
+import { useGetConversations, useGetCharacterProfiles } from '../hooks/useQueries';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Plus, MessageCircle } from 'lucide-react';
 import MessageThread from '../components/MessageThread';
 import CreateConversationDialog from '../components/CreateConversationDialog';
@@ -82,14 +82,14 @@ export default function Messages() {
             return (
               <Card
                 key={conv.id}
-                className="rounded-3xl border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+                className="rounded-3xl border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg cursor-pointer hover:scale-[1.02] transition-transform"
                 onClick={() => setSelectedConversation(conv)}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <AvatarImage avatar={character?.avatar} name={getConversationName(conv)} size="md" />
+                    <AvatarImage avatar={character?.avatar} name={character?.name || 'Unknown'} size="md" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-foreground truncate">{getConversationName(conv)}</p>
+                      <p className="font-bold text-lg truncate">{getConversationName(conv)}</p>
                       <p className="text-sm text-muted-foreground truncate">{getLastMessage(conv)}</p>
                     </div>
                   </div>
@@ -103,7 +103,7 @@ export default function Messages() {
       <CreateConversationDialog
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
-        onConversationCreated={setSelectedConversation}
+        onConversationCreated={(conv) => setSelectedConversation(conv)}
       />
     </div>
   );

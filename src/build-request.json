@@ -1,74 +1,77 @@
 {
   "kind": "build_request",
-  "title": "Fix long friend/name selector: enable vertical scrolling and up/down arrow controls",
-  "projectName": "ToonSpace",
-  "priority": "high",
+  "title": "Add video posting, live streaming, and fix messaging",
+  "projectName": "Social Hub",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
-      "target": "frontend",
+      "text": "Add ability to create and post video content with captions and author selection (user or character)",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-19"
         ],
         "quotes": [
-          "Like I said it wont let me scroll through yhe names up and down. I want to be able to have an up and down arrow to press or the ability to scroll up and down."
+          "I was wondering if my app can have the ability to post videos"
         ]
       },
       "acceptanceCriteria": [
-        "When a Select dropdown contains more items than can fit on screen, the dropdown viewport scrolls vertically via mouse wheel/trackpad on desktop.",
-        "On touch devices, the dropdown viewport scrolls vertically via touch drag inside the list.",
-        "Visible Up and Down controls are present for overflowing lists and pressing them scrolls the list up/down.",
-        "Users can scroll to and select names at both the top and bottom of long lists without the list getting stuck.",
-        "No UI element (e.g., scroll indicators) blocks taps/clicks on list items."
+        "Users can upload video files when creating a post",
+        "Video posts display with playback controls in the feed",
+        "Videos can be posted by the user or any of their characters",
+        "Video posts support captions like regular posts"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
-      "target": "frontend",
+      "text": "Implement live streaming capability for the user and their character friends to broadcast live video",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-19"
         ],
         "quotes": [
-          "I want to be able to have an up and down arrow to press"
+          "for different charicter friends and me to go live"
         ]
       },
       "acceptanceCriteria": [
-        "ScrollableSelectContent renders functional Up/Down scroll buttons (not just visual indicators) when the list can scroll.",
-        "Up button is hidden/disabled at the top of the list; Down button is hidden/disabled at the bottom of the list.",
-        "Holding or repeatedly pressing the buttons scrolls through the list predictably."
+        "Users can start a live stream session",
+        "Characters can start live stream sessions",
+        "Other users can view active live streams",
+        "Live streams are clearly indicated in the UI as 'Live'"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Audit all name/friend/character selection dropdowns and ensure they use the shared ScrollableSelectContent wrapper (or equivalent scroll-enabled SelectContent) so the long-list scrolling fix applies everywhere names are chosen (e.g., post author selector, comment author selector, story author selector, message sender selector).",
-      "target": "frontend",
+      "text": "Fix the messaging functionality so conversations and message sending work reliably",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-19"
         ],
         "quotes": [
-          "when I have an idea for a post to come from someone,  or for a coment from a certain someone I cant reach to their name"
+          "the messages thing isn't really working"
         ]
       },
       "acceptanceCriteria": [
-        "All existing Select-based name pickers across the app use the scroll-enabled dropdown content component.",
-        "At least the selectors in PostComposer and CommentsPanel continue to work and allow reaching any name with many entries.",
-        "No regressions: selecting an item still closes the dropdown and sets the selected value correctly."
+        "Conversations load correctly in the Messages page",
+        "New messages can be sent and appear immediately in the thread",
+        "Message history persists and displays accurately",
+        "Creating new conversations works without errors"
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (shadcn components); compose/wrap them instead.",
-    "Keep all backend logic in the existing single Motoko actor; no backend changes are required for this UI scrolling fix."
+    "Maintain single-actor backend architecture in backend/main.mo",
+    "Do not modify immutable frontend paths: useInternetIdentity.ts, useInternetIdentity.tsx, useActor.ts, main.tsx, components/ui/*",
+    "Keep existing social features (posts, stories, comments, characters) fully functional"
   ],
   "nonGoals": [
-    "Adding new backend endpoints or changing Motoko data models for friends/characters.",
-    "Implementing search, filtering, or sorting for the friend/name list (only scrolling + arrow navigation is in scope).",
-    "Adding real-time syncing or chat features beyond the existing messaging UI."
+    "Third-party streaming services integration",
+    "Real-time video chat or WebRTC features",
+    "Video editing or transformation capabilities",
+    "External CDN or storage services"
   ],
   "imageRequirements": {
     "required": [],

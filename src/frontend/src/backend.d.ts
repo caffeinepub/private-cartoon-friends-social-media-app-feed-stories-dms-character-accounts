@@ -14,6 +14,12 @@ export class ExternalBlob {
     static fromBytes(blob: Uint8Array<ArrayBuffer>): ExternalBlob;
     withUploadProgress(onProgress: (percentage: number) => void): ExternalBlob;
 }
+export interface ConversationView {
+    id: string;
+    participants: Array<string>;
+    messages: Array<MessageView>;
+    profileOwner: Principal;
+}
 export interface CommentView {
     id: string;
     content: string;
@@ -48,18 +54,20 @@ export interface PostView {
     image?: ExternalBlob;
     profileOwner: Principal;
 }
+export interface VideoView {
+    id: string;
+    video: ExternalBlob;
+    author: string;
+    timestamp: bigint;
+    caption: string;
+    profileOwner: Principal;
+}
 export interface MessageView {
     id: string;
     content: string;
     sender: string;
     conversationId: string;
     timestamp: bigint;
-    profileOwner: Principal;
-}
-export interface ConversationView {
-    id: string;
-    participants: Array<string>;
-    messages: Array<MessageView>;
     profileOwner: Principal;
 }
 export interface UserProfile {
@@ -79,9 +87,11 @@ export interface backendInterface {
     createConversation(participants: Array<string>): Promise<string>;
     createPost(authorId: string, content: string, image: ExternalBlob | null): Promise<string>;
     createStory(authorId: string, image: ExternalBlob, caption: string): Promise<string>;
+    createVideo(authorId: string, video: ExternalBlob, caption: string): Promise<string>;
     deleteCharacter(characterId: string): Promise<void>;
     deletePost(postId: string): Promise<void>;
     deleteStory(storyId: string): Promise<void>;
+    deleteVideo(videoId: string): Promise<void>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getCharacterProfiles(): Promise<Array<CharacterProfileView>>;
@@ -91,6 +101,7 @@ export interface backendInterface {
     getPosts(): Promise<Array<PostView>>;
     getStories(): Promise<Array<StoryView>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getVideos(): Promise<Array<VideoView>>;
     isCallerAdmin(): Promise<boolean>;
     likePost(postId: string): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;

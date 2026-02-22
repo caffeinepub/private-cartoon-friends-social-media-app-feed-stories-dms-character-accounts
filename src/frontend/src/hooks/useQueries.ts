@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import { UserProfile, CharacterProfileView, PostView, CommentView, StoryView, ConversationView, ExternalBlob } from '../backend';
+import { UserProfile, CharacterProfileView, PostView, CommentView, StoryView, ConversationView, VideoView, ExternalBlob } from '../backend';
 
 // User Profile Queries
 export function useGetCallerUserProfile() {
@@ -217,6 +217,50 @@ export function useCreateStory() {
   });
 }
 
+// Video Queries
+export function useGetVideos() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<VideoView[]>({
+    queryKey: ['videos'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getVideos();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useCreateVideo() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ authorId, video, caption }: { authorId: string; video: ExternalBlob; caption: string }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.createVideo(authorId, video, caption);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['videos'] });
+    },
+  });
+}
+
+export function useDeleteVideo() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (videoId: string) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.deleteVideo(videoId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['videos'] });
+    },
+  });
+}
+
 // Conversation Queries
 export function useGetConversations() {
   const { actor, isFetching } = useActor();
@@ -269,8 +313,9 @@ export function useSendMessage() {
       if (!actor) throw new Error('Actor not available');
       return actor.sendMessage(conversationId, senderId, content);
     },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['conversation', variables.conversationId] });
+    onSuccess: async (_, variables) => {
+      // Immediately refetch the conversation to show the new message
+      await queryClient.refetchQueries({ queryKey: ['conversation', variables.conversationId] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
   });

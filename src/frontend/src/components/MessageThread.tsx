@@ -46,16 +46,19 @@ export default function MessageThread({ conversation, onBack }: MessageThreadPro
     e.preventDefault();
     if (!content.trim()) return;
 
+    const messageContent = content.trim();
+    setContent(''); // Clear immediately for better UX
+    setSenderId('user');
+
     try {
       await sendMessage.mutateAsync({
         conversationId: currentConversation.id,
         senderId,
-        content: content.trim()
+        content: messageContent
       });
-      setContent('');
-      setSenderId('user');
     } catch (error) {
       toast.error('Failed to send message');
+      setContent(messageContent); // Restore content on error
     }
   };
 

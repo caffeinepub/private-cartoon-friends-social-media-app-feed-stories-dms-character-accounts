@@ -1,26 +1,34 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project focused on improving friend/name selection usability: users with many friends cannot scroll through the name list to reach desired names.",
+  "summary": "Social media app with video posting, live streaming, and messaging features",
   "architectural_notes": [],
   "known_issues": [
-    "Friends/name list cannot be scrolled up/down, preventing users from reaching names in long lists."
+    "Messaging feature not working properly"
   ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-custom-select-dropdown-used-for-long-name-lists-so-users-can-reliably-reach-any-name-by-scrolling-vertically-mouse-wheel-trackpad-and-touch-drag-and-by-clicking-tapping-explicit-up-down-arrow-controls-when-the-list-overflows",
-      "title": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
+      "id": "feature-add-ability-to-create-and-post-video-content-with-captions-and-author-selection-user-or-character",
+      "title": "Add ability to create and post video content with captions and author selection (user or character)",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-implement-the-up-down-arrow-controls-inside-the-scrollable-select-dropdown-by-using-the-existing-radix-select-scroll-button-components-already-imported-in-scrollableselectcontent-and-ensure-they-are-only-shown-when-scrolling-is-possible-in-that-direction",
-      "title": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
+      "id": "feature-implement-live-streaming-capability-for-the-user-and-their-character-friends-to-broadcast-live-video",
+      "title": "Implement live streaming capability for the user and their character friends to broadcast live video",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-messaging-functionality-so-conversations-and-message-sending-work-reliably",
+      "title": "Fix the messaging functionality so conversations and message sending work reliably",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -28,20 +36,24 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Enable scrolling through the friends/name list (up/down) and/or provide up/down arrow controls to navigate long lists.",
+      "summary": "Add ability to post videos",
       "reqIds": [],
       "status": "pending"
     },
     {
-      "id": "AR-4",
-      "summary": "Audit all name/friend/character selection dropdowns and ensure they use the shared ScrollableSelectContent wrapper (or equivalent scroll-enabled SelectContent) so the long-list scrolling fix applies everywhere names are chosen (e.g., post author selector, comment author selector, story author selector, message sender selector).",
-      "reqIds": [
-        "REQ-3"
-      ],
+      "id": "AR-2",
+      "summary": "Add live streaming functionality for user and character friends",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Fix messaging feature that isn't working properly",
+      "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "ToonSpace",
+  "projectName": "Social Hub",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

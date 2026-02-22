@@ -1,80 +1,116 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Scrollable long-name Select dropdowns with Radix up/down controls",
+  "title": "Add video posting, live streaming, and fix messaging",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Make long-name Select dropdowns reliably vertically scrollable (wheel/trackpad/touch) and add explicit Up/Down controls without blocking item interaction.",
+      "summary": "Add ability to create and post video content with captions and author selection (user or character)",
       "acceptanceCriteria": [
-        "When a Select dropdown contains more items than can fit on screen, the dropdown viewport scrolls vertically via mouse wheel/trackpad on desktop.",
-        "On touch devices, the dropdown viewport scrolls vertically via touch drag inside the list.",
-        "Visible Up and Down controls are present for overflowing lists and pressing them scrolls the list up/down.",
-        "Users can scroll to and select names at both the top and bottom of long lists without the list getting stuck.",
-        "No UI element (e.g., scroll indicators) blocks taps/clicks on list items."
+        "Users can upload video files when creating a post",
+        "Video posts display with playback controls in the feed",
+        "Videos can be posted by the user or any of their characters",
+        "Video posts support captions like regular posts"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ScrollableSelectContent.tsx",
-          "operation": "modify",
-          "description": "Replace the current non-interactive top/bottom scroll indicators with an implementation that preserves vertical scrolling and supports touch dragging inside the viewport; ensure the Select viewport element remains the scroll container and that added UI does not intercept list item clicks."
+          "path": "frontend/src/components/VideoComposer.tsx",
+          "operation": "create",
+          "description": "Create a video composer component that allows users to upload video files, enter captions, select an author (user or character), and submit the video post. Use the blob-storage component to handle video file uploads with progress tracking via ExternalBlob.fromBytes().withUploadProgress(). Verify the blob-storage component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/components/VideoCard.tsx",
+          "operation": "create",
+          "description": "Create a video card component that displays video content with HTML5 video controls, author information (using AvatarImage component), timestamp, caption, and playback controls. Use ExternalBlob.getDirectURL() to provide the video source for streaming and caching. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomeFeed.tsx",
           "operation": "modify",
-          "description": "Adjust the .scrollable-select-content styles so the Radix Select viewport consistently supports overflow scrolling (desktop wheel/trackpad + mobile touch drag) and ensure any scroll affordances/buttons do not overlay and block selecting items."
+          "description": "Integrate VideoComposer into the feed and display VideoCard components alongside PostCard components. Fetch videos using the useGetVideos query hook and sort them by timestamp. Maintain existing stories and post composer features."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add useGetVideos query hook to fetch videos from the backend using actor.getVideos(). Add useCreateVideo mutation hook that accepts authorId, video (ExternalBlob), and caption, then calls actor.createVideo(). Add useDeleteVideo mutation hook for video deletion. Include proper query invalidation after mutations."
+        },
+        {
+          "path": "frontend/src/components/AppShell.tsx",
+          "operation": "modify",
+          "description": "Add a 'Videos' navigation item to the bottom navigation bar and implement routing to display a dedicated videos page when selected. Maintain existing navigation structure for Feed, Characters, Messages, and Profile."
+        },
+        {
+          "path": "frontend/src/pages/Videos.tsx",
+          "operation": "create",
+          "description": "Create a dedicated videos page that displays all videos in a grid or list layout using VideoCard components. Include the VideoComposer at the top for creating new videos. Fetch and display videos using the useGetVideos hook with loading states."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Implement functional in-dropdown up/down scroll buttons using the already-imported Radix SelectScrollUpButton/SelectScrollDownButton and show them only when scrolling is possible.",
+      "summary": "Implement live streaming capability for the user and their character friends to broadcast live video",
       "acceptanceCriteria": [
-        "ScrollableSelectContent renders functional Up/Down scroll buttons (not just visual indicators) when the list can scroll.",
-        "Up button is hidden/disabled at the top of the list; Down button is hidden/disabled at the bottom of the list.",
-        "Holding or repeatedly pressing the buttons scrolls through the list predictably."
+        "Users can start a live stream session",
+        "Characters can start live stream sessions",
+        "Other users can view active live streams",
+        "Live streams are clearly indicated in the UI as 'Live'"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ScrollableSelectContent.tsx",
-          "operation": "modify",
-          "description": "Use Radix SelectScrollUpButton and SelectScrollDownButton (already imported) inside ScrollableSelectContent; wire them to appear only when the viewport can scroll up/down based on current scroll position and content height, and ensure press-and-hold/repeat behavior works predictably."
+          "path": "frontend/src/components/LiveStreamDialog.tsx",
+          "operation": "create",
+          "description": "Create a dialog component for starting a live stream. Include author selection (user or character), stream title/caption input, and a start streaming button. Display streaming status with a 'Live' indicator when active. Handle stream initialization and display simulated live stream UI with video preview."
         },
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/components/LiveStreamCard.tsx",
+          "operation": "create",
+          "description": "Create a card component to display active live streams in the feed. Show a prominent 'LIVE' badge, author information with AvatarImage, stream title, viewer count placeholder, and a thumbnail or video player. Provide a click action to open the full live stream viewer."
+        },
+        {
+          "path": "frontend/src/components/LiveStreamViewer.tsx",
+          "operation": "create",
+          "description": "Create a full-screen live stream viewer component that displays the live video stream with author info, caption, viewer count, and chat/interaction UI. Include a close button to return to the feed. Display the 'LIVE' indicator prominently."
+        },
+        {
+          "path": "frontend/src/pages/HomeFeed.tsx",
           "operation": "modify",
-          "description": "Add/adjust styling hooks for the Radix scroll buttons rendered by ScrollableSelectContent (e.g., sizing, alignment, background) so they are visible, tappable, and do not obstruct the viewport's selectable items."
+          "description": "Add a button or section to start a live stream using the LiveStreamDialog. Display active live streams at the top of the feed using LiveStreamCard components. Wire up the LiveStreamViewer to open when a live stream card is clicked."
+        },
+        {
+          "path": "frontend/src/pages/Videos.tsx",
+          "operation": "modify",
+          "description": "Add a live streaming section at the top of the videos page showing active live streams using LiveStreamCard components. Include a button to start a new live stream via LiveStreamDialog."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Ensure all name/friend/character Select dropdowns use the shared ScrollableSelectContent so the long-list scrolling fix applies everywhere.",
+      "summary": "Fix the messaging functionality so conversations and message sending work reliably",
       "acceptanceCriteria": [
-        "All existing Select-based name pickers across the app use the scroll-enabled dropdown content component.",
-        "At least the selectors in PostComposer and CommentsPanel continue to work and allow reaching any name with many entries.",
-        "No regressions: selecting an item still closes the dropdown and sets the selected value correctly."
+        "Conversations load correctly in the Messages page",
+        "New messages can be sent and appear immediately in the thread",
+        "Message history persists and displays accurately",
+        "Creating new conversations works without errors"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/PostComposer.tsx",
+          "path": "frontend/src/pages/Messages.tsx",
           "operation": "modify",
-          "description": "Audit the author selector Select usage to confirm it uses ScrollableSelectContent (not plain SelectContent) and update any props/structure needed to remain compatible with the improved scroll buttons and scrolling behavior."
-        },
-        {
-          "path": "frontend/src/components/CommentsPanel.tsx",
-          "operation": "modify",
-          "description": "Audit the comment author selector Select usage to ensure it uses ScrollableSelectContent everywhere and adjust wiring if needed so selecting an item still closes the dropdown and updates the selected value correctly."
-        },
-        {
-          "path": "frontend/src/components/CreateStoryDialog.tsx",
-          "operation": "modify",
-          "description": "Audit the story author selector Select usage to ensure it uses ScrollableSelectContent and remains compatible with the improved scrollable dropdown behavior for long character lists."
+          "description": "Review and fix conversation loading logic. Ensure useGetConversations hook is called correctly and conversations display properly. Verify error handling and loading states are correctly implemented. Fix any issues with conversation selection and state management."
         },
         {
           "path": "frontend/src/components/MessageThread.tsx",
           "operation": "modify",
-          "description": "Audit the message sender selector Select usage to ensure it uses ScrollableSelectContent and validate that long sender lists can be fully reached and selected without the dropdown getting stuck."
+          "description": "Fix message sending functionality to ensure new messages appear immediately after submission. Verify the useSendMessage mutation properly invalidates the conversation query to trigger a refetch. Fix auto-scroll behavior to scroll to the latest message. Ensure message history displays correctly with proper sorting by timestamp."
+        },
+        {
+          "path": "frontend/src/components/CreateConversationDialog.tsx",
+          "operation": "modify",
+          "description": "Review and fix conversation creation logic. Ensure the useCreateConversation mutation correctly submits the selected participants and handles success/error states. Verify the dialog closes properly after successful creation and the conversation list updates."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Review and fix the useGetConversations, useGetConversation, useSendMessage, and useCreateConversation hooks. Ensure proper error handling, query invalidation after mutations, and correct data transformation. Verify that message sending and conversation creation properly trigger refetches of relevant data."
         }
       ]
     }

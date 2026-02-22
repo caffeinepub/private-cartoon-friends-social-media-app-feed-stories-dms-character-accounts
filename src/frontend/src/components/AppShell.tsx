@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, MessageCircle, Users, User, LogOut } from 'lucide-react';
+import { Home, MessageCircle, Users, User, LogOut, Video } from 'lucide-react';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -7,8 +7,9 @@ import HomeFeed from '../pages/HomeFeed';
 import Messages from '../pages/Messages';
 import Characters from '../pages/Characters';
 import Profile from '../pages/Profile';
+import Videos from '../pages/Videos';
 
-type Page = 'home' | 'messages' | 'characters' | 'profile';
+type Page = 'home' | 'messages' | 'characters' | 'profile' | 'videos';
 
 export default function AppShell() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -30,6 +31,8 @@ export default function AppShell() {
         return <Characters />;
       case 'profile':
         return <Profile />;
+      case 'videos':
+        return <Videos />;
       default:
         return <HomeFeed />;
     }
@@ -71,12 +74,18 @@ export default function AppShell() {
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-2xl">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex justify-around items-center max-w-md mx-auto">
+          <div className="flex justify-around items-center max-w-2xl mx-auto">
             <NavButton
               icon={Home}
               label="Home"
               active={currentPage === 'home'}
               onClick={() => setCurrentPage('home')}
+            />
+            <NavButton
+              icon={Video}
+              label="Videos"
+              active={currentPage === 'videos'}
+              onClick={() => setCurrentPage('videos')}
             />
             <NavButton
               icon={MessageCircle}
@@ -127,7 +136,7 @@ function NavButton({ icon: Icon, label, active, onClick }: {
   return (
     <button
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all ${
+      className={`flex flex-col items-center gap-1 px-3 py-2 rounded-2xl transition-all ${
         active
           ? 'bg-gradient-to-br from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] text-white shadow-lg scale-105'
           : 'text-muted-foreground hover:text-foreground hover:bg-accent'

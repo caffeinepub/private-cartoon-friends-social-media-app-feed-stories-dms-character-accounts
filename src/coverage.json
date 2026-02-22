@@ -1,62 +1,98 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T23:02:31.818Z",
+  "generatedAt": "2026-02-22T21:31:06.702Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 3,
-    "implemented": 2,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the custom select dropdown used for long name lists so users can reliably reach any name by scrolling vertically (mouse wheel, trackpad, and touch drag) and by clicking/tapping explicit Up/Down arrow controls when the list overflows.",
+        "summary": "Add ability to create and post video content with captions and author selection (user or character)",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ScrollableSelectContent.tsx",
-          "frontend/src/index.css"
+          "frontend/src/components/VideoComposer.tsx",
+          "frontend/src/components/VideoCard.tsx",
+          "frontend/src/pages/HomeFeed.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/AppShell.tsx",
+          "frontend/src/pages/Videos.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/ScrollableSelectContent.tsx",
-          "frontend/src/index.css"
+          "frontend/src/components/VideoComposer.tsx",
+          "frontend/src/components/VideoCard.tsx",
+          "frontend/src/pages/HomeFeed.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/AppShell.tsx",
+          "frontend/src/pages/Videos.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Implement the up/down arrow controls inside the scrollable Select dropdown by using the existing Radix select scroll button components already imported in ScrollableSelectContent, and ensure they are only shown when scrolling is possible in that direction.",
+        "summary": "Implement live streaming capability for the user and their character friends to broadcast live video",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ScrollableSelectContent.tsx",
-          "frontend/src/index.css"
+          "frontend/src/components/LiveStreamDialog.tsx",
+          "frontend/src/components/LiveStreamCard.tsx",
+          "frontend/src/components/LiveStreamViewer.tsx",
+          "frontend/src/pages/HomeFeed.tsx",
+          "frontend/src/pages/Videos.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/ScrollableSelectContent.tsx",
-          "frontend/src/index.css"
+          "frontend/src/components/LiveStreamDialog.tsx",
+          "frontend/src/components/LiveStreamCard.tsx",
+          "frontend/src/components/LiveStreamViewer.tsx",
+          "frontend/src/pages/HomeFeed.tsx",
+          "frontend/src/pages/Videos.tsx"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Audit all name/friend/character selection dropdowns and ensure they use the shared ScrollableSelectContent wrapper (or equivalent scroll-enabled SelectContent) so the long-list scrolling fix applies everywhere names are chosen (e.g., post author selector, comment author selector, story author selector, message sender selector).",
-        "status": "missing",
+        "summary": "Fix the messaging functionality so conversations and message sending work reliably",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/PostComposer.tsx",
-          "frontend/src/components/CommentsPanel.tsx",
-          "frontend/src/components/CreateStoryDialog.tsx",
-          "frontend/src/components/MessageThread.tsx"
+          "frontend/src/pages/Messages.tsx",
+          "frontend/src/components/MessageThread.tsx",
+          "frontend/src/components/CreateConversationDialog.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/pages/Messages.tsx",
+          "frontend/src/components/MessageThread.tsx",
+          "frontend/src/components/CreateConversationDialog.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/ScrollableSelectContent.tsx",
-    "frontend/src/index.css",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/AppShell.tsx",
+    "frontend/src/components/CreateConversationDialog.tsx",
+    "frontend/src/components/LiveStreamCard.tsx",
+    "frontend/src/components/LiveStreamDialog.tsx",
+    "frontend/src/components/LiveStreamViewer.tsx",
+    "frontend/src/components/MessageThread.tsx",
+    "frontend/src/components/VideoCard.tsx",
+    "frontend/src/components/VideoComposer.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/HomeFeed.tsx",
+    "frontend/src/pages/Messages.tsx",
+    "frontend/src/pages/Videos.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

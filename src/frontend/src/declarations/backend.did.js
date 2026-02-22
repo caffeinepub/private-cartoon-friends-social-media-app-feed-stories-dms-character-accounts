@@ -78,6 +78,14 @@ export const StoryView = IDL.Record({
   'image' : IDL.Opt(ExternalBlob),
   'profileOwner' : IDL.Principal,
 });
+export const VideoView = IDL.Record({
+  'id' : IDL.Text,
+  'video' : ExternalBlob,
+  'author' : IDL.Text,
+  'timestamp' : IDL.Int,
+  'caption' : IDL.Text,
+  'profileOwner' : IDL.Principal,
+});
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -117,9 +125,11 @@ export const idlService = IDL.Service({
       [],
     ),
   'createStory' : IDL.Func([IDL.Text, ExternalBlob, IDL.Text], [IDL.Text], []),
+  'createVideo' : IDL.Func([IDL.Text, ExternalBlob, IDL.Text], [IDL.Text], []),
   'deleteCharacter' : IDL.Func([IDL.Text], [], []),
   'deletePost' : IDL.Func([IDL.Text], [], []),
   'deleteStory' : IDL.Func([IDL.Text], [], []),
+  'deleteVideo' : IDL.Func([IDL.Text], [], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getCharacterProfiles' : IDL.Func(
@@ -141,6 +151,7 @@ export const idlService = IDL.Service({
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getVideos' : IDL.Func([], [IDL.Vec(VideoView)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'likePost' : IDL.Func([IDL.Text], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
@@ -222,6 +233,14 @@ export const idlFactory = ({ IDL }) => {
     'image' : IDL.Opt(ExternalBlob),
     'profileOwner' : IDL.Principal,
   });
+  const VideoView = IDL.Record({
+    'id' : IDL.Text,
+    'video' : ExternalBlob,
+    'author' : IDL.Text,
+    'timestamp' : IDL.Int,
+    'caption' : IDL.Text,
+    'profileOwner' : IDL.Principal,
+  });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -265,9 +284,15 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Text],
         [],
       ),
+    'createVideo' : IDL.Func(
+        [IDL.Text, ExternalBlob, IDL.Text],
+        [IDL.Text],
+        [],
+      ),
     'deleteCharacter' : IDL.Func([IDL.Text], [], []),
     'deletePost' : IDL.Func([IDL.Text], [], []),
     'deleteStory' : IDL.Func([IDL.Text], [], []),
+    'deleteVideo' : IDL.Func([IDL.Text], [], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getCharacterProfiles' : IDL.Func(
@@ -289,6 +314,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getVideos' : IDL.Func([], [IDL.Vec(VideoView)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'likePost' : IDL.Func([IDL.Text], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),

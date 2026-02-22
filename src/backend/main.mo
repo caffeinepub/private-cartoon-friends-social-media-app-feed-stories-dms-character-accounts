@@ -4,15 +4,17 @@ import Time "mo:core/Time";
 import Array "mo:core/Array";
 import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
+import Iter "mo:core/Iter";
 
 import Principal "mo:core/Principal";
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
+import Migration "migration";
 
 // Run migration as specified in with clause
-
+(with migration = Migration.run)
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
@@ -85,6 +87,25 @@ actor {
   };
 
   // Internal persistent data type
+  public type Video = {
+    id : Text;
+    author : Text;
+    video : Storage.ExternalBlob;
+    caption : Text;
+    timestamp : Int;
+    profileOwner : Principal;
+  };
+
+  public type VideoView = {
+    id : Text;
+    author : Text;
+    video : Storage.ExternalBlob;
+    caption : Text;
+    timestamp : Int;
+    profileOwner : Principal;
+  };
+
+  // Internal persistent data type
   type Message = {
     id : Text;
     conversationId : Text;
@@ -145,6 +166,7 @@ actor {
   let posts = Map.empty<Text, Post>();
   let comments = Map.empty<Text, Comment>();
   let stories = Map.empty<Text, Story>();
+  let videos = Map.empty<Text, Video>();
   let conversations = Map.empty<Text, Conversation>();
 
   // User Profile API (required by frontend)
@@ -284,8 +306,9 @@ actor {
     let post = posts.get(postId);
     switch (post) {
       case (?p) {
+        // Users can only like posts in their own profile (their own posts or their characters' posts)
         if (p.profileOwner != caller) {
-          Runtime.trap("Unauthorized: Can only interact with your own posts");
+          Runtime.trap("Unauthorized: Can only like posts in your own profile");
         };
         let updatedLikes = p.likes.concat([caller.toText()]);
         let updatedPost = { p with likes = updatedLikes };
@@ -320,8 +343,9 @@ actor {
     let post = posts.get(postId);
     switch (post) {
       case (?p) {
+        // Users can only comment on posts in their own profile
         if (p.profileOwner != caller) {
-          Runtime.trap("Unauthorized: Can only comment on your own posts");
+          Runtime.trap("Unauthorized: Can only comment on posts in your own profile");
         };
 
         // Verify author ownership
@@ -399,6 +423,55 @@ actor {
         stories.remove(storyId);
       };
       case (null) { Runtime.trap("Story not found") };
+    };
+  };
+
+  // Videos API
+  public shared ({ caller }) func createVideo(authorId : Text, video : Storage.ExternalBlob, caption : Text) : async Text {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can create videos");
+    };
+
+    // Verify author ownership
+    if (authorId != "user") {
+      let character = characterProfiles.get(authorId);
+      switch (character) {
+        case (?c) {
+          if (c.owner != caller) {
+            Runtime.trap("Unauthorized: Can only create videos as yourself or your own characters");
+          };
+        };
+        case (null) { Runtime.trap("Character not found") };
+      };
+    };
+
+    let id = "video_" # caller.toText() # "_" # Time.now().toText();
+    let videoObj = {
+      id;
+      author = authorId;
+      video = video;
+      caption;
+      timestamp = Time.now();
+      profileOwner = caller;
+    };
+    videos.add(id, videoObj);
+    id;
+  };
+
+  public shared ({ caller }) func deleteVideo(videoId : Text) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can delete videos");
+    };
+
+    let video = videos.get(videoId);
+    switch (video) {
+      case (?v) {
+        if (v.profileOwner != caller) {
+          Runtime.trap("Unauthorized: Can only delete your own videos");
+        };
+        videos.remove(videoId);
+      };
+      case (null) { Runtime.trap("Video not found") };
     };
   };
 
@@ -564,6 +637,27 @@ actor {
           caption = s.caption;
           timestamp = s.timestamp;
           profileOwner = s.profileOwner;
+        };
+      }
+    );
+  };
+
+  public query ({ caller }) func getVideos() : async [VideoView] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view videos");
+    };
+
+    videos.values().toArray().filter(
+      func(v : Video) : Bool { v.profileOwner == caller }
+    ).map(
+      func(v) {
+        {
+          id = v.id;
+          author = v.author;
+          video = v.video;
+          caption = v.caption;
+          timestamp = v.timestamp;
+          profileOwner = v.profileOwner;
         };
       }
     );
