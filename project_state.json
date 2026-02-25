@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Mobile app with characters/messaging feature. User is experiencing a bug where the Messages screen shows 'No conversations yet' and tapping a character to message them results in a blank screen — the messaging system is not connected to the character friends system.",
+  "architectural_notes": [],
+  "known_issues": [
+    "Messages screen shows 'No conversations yet' and tapping a character to message results in a blank chat screen — messaging is not connected to the characters/friends system"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-fix-the-blank-screen-that-appears-after-the-user-selects-a-character-in-the-new-conversation-dialog-and-taps-start-chat-after-the-conversation-is-created-the-app-must-navigate-to-and-render-the-messagethread-for-that-conversation-without-showing-a-blank-screen",
+      "title": "Fix the blank screen that appears after the user selects a character in the 'New Conversation' dialog and taps 'Start Chat'. After the conversation is created, the app must navigate to and render the MessageThread for that conversation without showing a blank screen.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-messages-page-so-that-existing-conversations-are-loaded-and-displayed-in-the-conversation-list-instead-of-always-showing-no-conversations-yet-the-list-must-fetch-conversations-from-the-backend-and-render-them-on-mount",
+      "title": "Fix the Messages page so that existing conversations are loaded and displayed in the conversation list instead of always showing 'No conversations yet'. The list must fetch conversations from the backend and render them on mount.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-createconversationdialog-correctly-calls-the-backend-to-create-a-conversation-and-returns-a-valid-conversation-id-to-the-parent-messages-page-the-messages-page-must-use-that-id-to-immediately-switch-to-the-messagethread-view-rather-than-doing-nothing-or-navigating-to-a-blank-state",
+      "title": "Ensure the CreateConversationDialog correctly calls the backend to create a conversation and returns a valid conversation ID to the parent Messages page. The Messages page must use that ID to immediately switch to the MessageThread view rather than doing nothing or navigating to a blank state.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-messagethread-so-it-handles-the-case-where-conversation-data-or-messages-are-still-loading-or-undefined-without-rendering-a-blank-screen-show-a-loading-skeleton-or-spinner-until-data-is-ready-and-show-a-clear-error-message-if-the-conversation-cannot-be-loaded",
+      "title": "Fix MessageThread so it handles the case where conversation data or messages are still loading or undefined without rendering a blank screen. Show a loading skeleton or spinner until data is ready, and show a clear error message if the conversation cannot be loaded.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [],
+  "gameProjectType": "none",
+  "projectName": "Fix blank screen after starting conversation from Messages dialog",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

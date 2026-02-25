@@ -1,0 +1,85 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix blank screen after starting conversation from Messages dialog",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Fix blank screen after creating a new conversation by ensuring proper navigation to MessageThread",
+      "acceptanceCriteria": [
+        "User opens the New Conversation dialog, selects one or more characters, and taps 'Start Chat'",
+        "The dialog closes and the MessageThread for the newly created conversation is immediately displayed — no blank screen",
+        "The MessageThread shows the conversation header (character name/avatar) and an empty message list with the send input",
+        "The new conversation also appears in the Messages list when the user navigates back"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Messages.tsx",
+          "operation": "modify",
+          "description": "Fix the onCreated callback handler in Messages.tsx to properly set the activeConversationId state when CreateConversationDialog returns the new conversation ID, ensuring the view switches from the conversation list to the MessageThread immediately after creation."
+        },
+        {
+          "path": "frontend/src/components/CreateConversationDialog.tsx",
+          "operation": "modify",
+          "description": "Ensure CreateConversationDialog correctly invokes the createConversation mutation, waits for the backend to return a valid conversation ID, passes that ID to the parent via the onCreated callback, and closes the dialog only after the callback completes. Add error handling to display validation or backend errors within the dialog instead of navigating."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Fix Messages page to load and display existing conversations instead of always showing 'No conversations yet'",
+      "acceptanceCriteria": [
+        "On opening the Messages tab, any previously created conversations are fetched and shown in the list",
+        "Each conversation item shows the character name, avatar, and the last message or a placeholder",
+        "Tapping a conversation in the list opens the correct MessageThread",
+        "'No conversations yet' state is only shown when there are genuinely zero conversations"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Messages.tsx",
+          "operation": "modify",
+          "description": "Fix the conversations list rendering logic in Messages.tsx to correctly use the useGetConversations query result. Ensure the query is enabled and not blocked by incorrect dependencies. Render the conversation list when conversations.length > 0, showing each conversation with participant character details. Display 'No conversations yet' only when the query has successfully loaded and returned an empty array."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Ensure CreateConversationDialog backend call returns a valid conversation ID and Messages page uses it for immediate navigation",
+      "acceptanceCriteria": [
+        "CreateConversationDialog invokes the backend createConversation mutation and receives a valid conversation ID",
+        "The ID is passed back to Messages.tsx via the onCreated callback",
+        "Messages.tsx sets the active conversation to that ID, rendering MessageThread instead of a blank area",
+        "If conversation creation fails, an error message is shown inside the dialog instead of navigating away"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CreateConversationDialog.tsx",
+          "operation": "modify",
+          "description": "Verify that the createConversation mutation in CreateConversationDialog correctly calls the backend and returns the conversation ID. Ensure the onCreated prop is invoked with the returned ID before the dialog closes. Add error handling that displays backend errors or validation failures inside the dialog UI without closing it or navigating away."
+        },
+        {
+          "path": "frontend/src/pages/Messages.tsx",
+          "operation": "modify",
+          "description": "Fix the onCreated callback in Messages.tsx to immediately set activeConversationId to the returned conversation ID, triggering a view switch to MessageThread. Ensure the state update does not get lost or overridden by stale data. After the conversation is created, invalidate the conversations query so the new conversation appears in the list when navigating back."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Fix MessageThread to handle loading and error states without rendering a blank screen",
+      "acceptanceCriteria": [
+        "MessageThread renders a loading spinner/skeleton while conversation data is being fetched",
+        "MessageThread renders a visible error state if the conversation ID is invalid or the fetch fails",
+        "MessageThread never renders a completely blank screen under any loading or error condition",
+        "Once data loads successfully, the full thread UI is shown"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/MessageThread.tsx",
+          "operation": "modify",
+          "description": "Add explicit loading and error handling logic to MessageThread. While the conversation query is loading or the data is undefined, render a loading spinner or skeleton UI. If the conversation query fails or returns null/undefined after loading completes, render a visible error message (e.g., 'Conversation not found'). Ensure the component never returns null or an empty fragment during loading or error states, preventing a blank screen."
+        }
+      ]
+    }
+  ]
+}

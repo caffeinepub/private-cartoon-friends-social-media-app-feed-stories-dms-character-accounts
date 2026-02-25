@@ -1,0 +1,91 @@
+{
+  "kind": "build_request",
+  "title": "Fix blank screen after starting conversation from Messages dialog",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Fix the blank screen that appears after the user selects a character in the 'New Conversation' dialog and taps 'Start Chat'. After the conversation is created, the app must navigate to and render the MessageThread for that conversation without showing a blank screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Nothing comes up its just a blank screen"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User opens the New Conversation dialog, selects one or more characters, and taps 'Start Chat'",
+        "The dialog closes and the MessageThread for the newly created conversation is immediately displayed — no blank screen",
+        "The MessageThread shows the conversation header (character name/avatar) and an empty message list with the send input",
+        "The new conversation also appears in the Messages list when the user navigates back"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Fix the Messages page so that existing conversations are loaded and displayed in the conversation list instead of always showing 'No conversations yet'. The list must fetch conversations from the backend and render them on mount.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "No conversations yet"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On opening the Messages tab, any previously created conversations are fetched and shown in the list",
+        "Each conversation item shows the character name, avatar, and the last message or a placeholder",
+        "Tapping a conversation in the list opens the correct MessageThread",
+        "'No conversations yet' state is only shown when there are genuinely zero conversations"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Ensure the CreateConversationDialog correctly calls the backend to create a conversation and returns a valid conversation ID to the parent Messages page. The Messages page must use that ID to immediately switch to the MessageThread view rather than doing nothing or navigating to a blank state.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "CreateConversationDialog invokes the backend createConversation mutation and receives a valid conversation ID",
+        "The ID is passed back to Messages.tsx via the onCreated callback",
+        "Messages.tsx sets the active conversation to that ID, rendering MessageThread instead of a blank area",
+        "If conversation creation fails, an error message is shown inside the dialog instead of navigating away"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Fix MessageThread so it handles the case where conversation data or messages are still loading or undefined without rendering a blank screen. Show a loading skeleton or spinner until data is ready, and show a clear error message if the conversation cannot be loaded.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "MessageThread renders a loading spinner/skeleton while conversation data is being fetched",
+        "MessageThread renders a visible error state if the conversation ID is invalid or the fetch fails",
+        "MessageThread never renders a completely blank screen under any loading or error condition",
+        "Once data loads successfully, the full thread UI is shown"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under frontend/src/hooks/ (immutable paths)",
+    "Do not modify files under frontend/src/components/ui/ (immutable paths)",
+    "All fixes must remain within the single-actor Motoko backend architecture — no new backend services"
+  ],
+  "nonGoals": [
+    "Redesigning the visual appearance of the Messages page or MessageThread",
+    "Adding real-time messaging or push notifications",
+    "Changing the character creation or profile flows"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
