@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import { useGetCharacterProfiles, useDeleteCharacter } from '../hooks/useQueries';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
-import CharacterFormDialog from '../components/CharacterFormDialog';
-import AvatarImage from '../components/AvatarImage';
-import { toast } from 'sonner';
-import { CharacterProfileView } from '../backend';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import type { CharacterProfileView } from "../backend";
+import AvatarImage from "../components/AvatarImage";
+import CharacterFormDialog from "../components/CharacterFormDialog";
+import {
+  useDeleteCharacter,
+  useGetCharacterProfiles,
+} from "../hooks/useQueries";
 
 export default function Characters() {
   const [showDialog, setShowDialog] = useState(false);
-  const [editingCharacter, setEditingCharacter] = useState<CharacterProfileView | null>(null);
-  
+  const [editingCharacter, setEditingCharacter] =
+    useState<CharacterProfileView | null>(null);
+
   const { data: characters, isLoading } = useGetCharacterProfiles();
   const deleteCharacter = useDeleteCharacter();
 
@@ -21,13 +25,13 @@ export default function Characters() {
   };
 
   const handleDelete = async (characterId: string) => {
-    if (!confirm('Are you sure you want to delete this character?')) return;
+    if (!confirm("Are you sure you want to delete this character?")) return;
 
     try {
       await deleteCharacter.mutateAsync(characterId);
-      toast.success('Character deleted');
-    } catch (error) {
-      toast.error('Failed to delete character');
+      toast.success("Character deleted");
+    } catch (_error) {
+      toast.error("Failed to delete character");
     }
   };
 
@@ -73,18 +77,25 @@ export default function Characters() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {characters?.map((character) => (
-            <Card key={character.id} className="rounded-3xl border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg">
+            <Card
+              key={character.id}
+              className="rounded-3xl border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg"
+            >
               <CardHeader>
                 <div className="flex items-start gap-4">
-                  <AvatarImage 
-                    avatar={character.avatar} 
-                    name={character.name} 
+                  <AvatarImage
+                    avatar={character.avatar}
+                    name={character.name}
                     size="lg"
                     avatarTimestamp={character.avatarTimestamp}
                   />
                   <div className="flex-1">
-                    <CardTitle className="text-xl font-black">{character.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">{character.bio || 'No bio yet'}</p>
+                    <CardTitle className="text-xl font-black">
+                      {character.name}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {character.bio || "No bio yet"}
+                    </p>
                   </div>
                 </div>
               </CardHeader>

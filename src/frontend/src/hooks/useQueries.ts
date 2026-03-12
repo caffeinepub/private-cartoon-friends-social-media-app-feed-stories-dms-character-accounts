@@ -1,15 +1,26 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActor } from './useActor';
-import { UserProfile, CharacterProfileView, PostView, CommentView, StoryView, ConversationView, VideoView, ExternalBlob } from '../backend';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type {
+  CharacterProfileView,
+  CommentView,
+  ConversationView,
+  ExternalBlob,
+  PostView,
+  StoryView,
+  UserProfile,
+  VideoView,
+} from "../backend";
+import { retryWithBackoff } from "../utils/retry";
+import { useActor } from "./useActor";
 
-// User Profile Queries
+// ─── User Profile ────────────────────────────────────────────────────────────
+
 export function useGetCallerUserProfile() {
   const { actor, isFetching: actorFetching } = useActor();
 
   const query = useQuery<UserProfile | null>({
-    queryKey: ['currentUserProfile'],
+    queryKey: ["currentUserProfile"],
     queryFn: async () => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.getCallerUserProfile();
     },
     enabled: !!actor && !actorFetching,
@@ -29,28 +40,27 @@ export function useSaveCallerUserProfile() {
 
   return useMutation({
     mutationFn: async (profile: UserProfile) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.saveCallerUserProfile(profile);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
+      queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
     },
   });
 }
 
-// Character Queries
+// ─── Characters ──────────────────────────────────────────────────────────────
+
 export function useGetCharacterProfiles() {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<CharacterProfileView[]>({
-    queryKey: ['characters'],
+    queryKey: ["characterProfiles"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getCharacterProfiles();
     },
-    enabled: !!actor && !isFetching,
-    staleTime: 0, // Treat data as immediately stale
-    refetchOnMount: true,
+    enabled: !!actor && !actorFetching,
   });
 }
 
@@ -60,11 +70,11 @@ export function useCreateCharacter() {
 
   return useMutation({
     mutationFn: async ({ name, bio }: { name: string; bio: string }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createCharacter(name, bio);
+      if (!actor) throw new Error("Actor not available");
+      return retryWithBackoff(() => actor.createCharacter(name, bio));
     },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['characters'] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["characterProfiles"] });
     },
   });
 }
@@ -74,12 +84,16 @@ export function useUpdateCharacter() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ characterId, name, bio }: { characterId: string; name: string; bio: string }) => {
-      if (!actor) throw new Error('Actor not available');
+    mutationFn: async ({
+      characterId,
+      name,
+      bio,
+    }: { characterId: string; name: string; bio: string }) => {
+      if (!actor) throw new Error("Actor not available");
       return actor.updateCharacter(characterId, name, bio);
     },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['characters'] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["characterProfiles"] });
     },
   });
 }
@@ -89,12 +103,15 @@ export function useUploadAvatar() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ characterId, image }: { characterId: string; image: ExternalBlob }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.uploadAvatar(characterId, image);
+    mutationFn: async ({
+      characterId,
+      image,
+    }: { characterId: string; image: ExternalBlob }) => {
+      if (!actor) throw new Error("Actor not available");
+      return retryWithBackoff(() => actor.uploadAvatar(characterId, image));
     },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['characters'] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["characterProfiles"] });
     },
   });
 }
@@ -105,26 +122,27 @@ export function useDeleteCharacter() {
 
   return useMutation({
     mutationFn: async (characterId: string) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.deleteCharacter(characterId);
     },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['characters'] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["characterProfiles"] });
     },
   });
 }
 
-// Post Queries
+// ─── Posts ───────────────────────────────────────────────────────────────────
+
 export function useGetPosts() {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<PostView[]>({
-    queryKey: ['posts'],
+    queryKey: ["posts"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getPosts();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !actorFetching,
   });
 }
 
@@ -133,12 +151,20 @@ export function useCreatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ authorId, content, image }: { authorId: string; content: string; image: ExternalBlob | null }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createPost(authorId, content, image);
+    mutationFn: async ({
+      authorId,
+      content,
+      image,
+    }: {
+      authorId: string;
+      content: string;
+      image: ExternalBlob | null;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
+      return retryWithBackoff(() => actor.createPost(authorId, content, image));
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 }
@@ -149,26 +175,42 @@ export function useLikePost() {
 
   return useMutation({
     mutationFn: async (postId: string) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.likePost(postId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 }
 
-// Comment Queries
+export function useDeletePost() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (postId: string) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.deletePost(postId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+}
+
+// ─── Comments ────────────────────────────────────────────────────────────────
+
 export function useGetComments(postId: string) {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<CommentView[]>({
-    queryKey: ['comments', postId],
+    queryKey: ["comments", postId],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getComments(postId);
     },
-    enabled: !!actor && !isFetching && !!postId,
+    enabled: !!actor && !actorFetching && !!postId,
   });
 }
 
@@ -177,28 +219,38 @@ export function useCreateComment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ postId, authorId, content }: { postId: string; authorId: string; content: string }) => {
-      if (!actor) throw new Error('Actor not available');
+    mutationFn: async ({
+      postId,
+      authorId,
+      content,
+    }: {
+      postId: string;
+      authorId: string;
+      content: string;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
       return actor.createComment(postId, authorId, content);
     },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['comments', variables.postId] });
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["comments", variables.postId],
+      });
     },
   });
 }
 
-// Story Queries
+// ─── Stories ─────────────────────────────────────────────────────────────────
+
 export function useGetStories() {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<StoryView[]>({
-    queryKey: ['stories'],
+    queryKey: ["stories"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getStories();
     },
-    enabled: !!actor && !isFetching,
-    refetchInterval: 60000, // Refetch every minute to update expired stories
+    enabled: !!actor && !actorFetching,
   });
 }
 
@@ -207,27 +259,53 @@ export function useCreateStory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ authorId, image, caption }: { authorId: string; image: ExternalBlob; caption: string }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createStory(authorId, image, caption);
+    mutationFn: async ({
+      authorId,
+      image,
+      caption,
+    }: {
+      authorId: string;
+      image: ExternalBlob;
+      caption: string;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
+      return retryWithBackoff(() =>
+        actor.createStory(authorId, image, caption),
+      );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['stories'] });
+      queryClient.invalidateQueries({ queryKey: ["stories"] });
     },
   });
 }
 
-// Video Queries
+export function useDeleteStory() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (storyId: string) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.deleteStory(storyId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["stories"] });
+    },
+  });
+}
+
+// ─── Videos ──────────────────────────────────────────────────────────────────
+
 export function useGetVideos() {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<VideoView[]>({
-    queryKey: ['videos'],
+    queryKey: ["videos"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getVideos();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !actorFetching,
   });
 }
 
@@ -236,12 +314,22 @@ export function useCreateVideo() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ authorId, video, caption }: { authorId: string; video: ExternalBlob; caption: string }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createVideo(authorId, video, caption);
+    mutationFn: async ({
+      authorId,
+      video,
+      caption,
+    }: {
+      authorId: string;
+      video: ExternalBlob;
+      caption: string;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
+      return retryWithBackoff(() =>
+        actor.createVideo(authorId, video, caption),
+      );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['videos'] });
+      queryClient.invalidateQueries({ queryKey: ["videos"] });
     },
   });
 }
@@ -252,41 +340,53 @@ export function useDeleteVideo() {
 
   return useMutation({
     mutationFn: async (videoId: string) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.deleteVideo(videoId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['videos'] });
+      queryClient.invalidateQueries({ queryKey: ["videos"] });
     },
   });
 }
 
-// Conversation Queries
+// ─── Conversations ────────────────────────────────────────────────────────────
+
 export function useGetConversations() {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
   return useQuery<ConversationView[]>({
-    queryKey: ['conversations'],
+    queryKey: ["conversations"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getConversations();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !actorFetching,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 }
 
 export function useGetConversation(conversationId: string) {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
-  return useQuery<ConversationView | null>({
-    queryKey: ['conversation', conversationId],
+  const query = useQuery<ConversationView | null>({
+    queryKey: ["conversation", conversationId],
     queryFn: async () => {
-      if (!actor) return null;
-      return actor.getConversation(conversationId);
+      if (!actor) throw new Error("Actor not available");
+      const result = await actor.getConversation(conversationId);
+      return result ?? null;
     },
-    enabled: !!actor && !isFetching && !!conversationId,
-    refetchInterval: 3000, // Poll every 3 seconds for new messages
+    enabled: !!actor && !actorFetching && !!conversationId,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchInterval: 3000,
   });
+
+  return {
+    ...query,
+    isLoading: actorFetching || query.isPending,
+    isFetched: !!actor && !actorFetching && query.isFetched,
+  };
 }
 
 export function useCreateConversation() {
@@ -295,11 +395,13 @@ export function useCreateConversation() {
 
   return useMutation({
     mutationFn: async (participants: string[]) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createConversation(participants);
+      if (!actor) throw new Error("Actor not available");
+      const id = await actor.createConversation(participants);
+      return id;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    onSuccess: (newConvId) => {
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      queryClient.invalidateQueries({ queryKey: ["conversation", newConvId] });
     },
   });
 }
@@ -309,14 +411,23 @@ export function useSendMessage() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ conversationId, senderId, content }: { conversationId: string; senderId: string; content: string }) => {
-      if (!actor) throw new Error('Actor not available');
+    mutationFn: async ({
+      conversationId,
+      senderId,
+      content,
+    }: {
+      conversationId: string;
+      senderId: string;
+      content: string;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
       return actor.sendMessage(conversationId, senderId, content);
     },
-    onSuccess: async (_, variables) => {
-      // Immediately refetch the conversation to show the new message
-      await queryClient.refetchQueries({ queryKey: ['conversation', variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["conversation", variables.conversationId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
   });
 }

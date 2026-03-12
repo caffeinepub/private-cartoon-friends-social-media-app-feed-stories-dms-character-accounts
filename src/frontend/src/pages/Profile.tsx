@@ -1,21 +1,24 @@
-import { useState } from 'react';
-import { useGetCallerUserProfile, useSaveCallerUserProfile } from '../hooks/useQueries';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Upload } from 'lucide-react';
-import { toast } from 'sonner';
-import AvatarImage from '../components/AvatarImage';
-import { ExternalBlob } from '../backend';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Save, Upload } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { ExternalBlob } from "../backend";
+import AvatarImage from "../components/AvatarImage";
+import {
+  useGetCallerUserProfile,
+  useSaveCallerUserProfile,
+} from "../hooks/useQueries";
 
 export default function Profile() {
   const { data: userProfile, isLoading } = useGetCallerUserProfile();
   const saveProfile = useSaveCallerUserProfile();
 
-  const [name, setName] = useState(userProfile?.name || '');
-  const [bio, setBio] = useState(userProfile?.bio || '');
+  const [name, setName] = useState(userProfile?.name || "");
+  const [bio, setBio] = useState(userProfile?.bio || "");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
@@ -31,7 +34,7 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image must be less than 5MB');
+        toast.error("Image must be less than 5MB");
         return;
       }
       setAvatarFile(file);
@@ -44,7 +47,7 @@ export default function Profile() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      toast.error('Please enter your name');
+      toast.error("Please enter your name");
       return;
     }
 
@@ -60,14 +63,14 @@ export default function Profile() {
       await saveProfile.mutateAsync({
         name: name.trim(),
         bio: bio.trim(),
-        avatar: avatarBlob
+        avatar: avatarBlob,
       });
 
-      toast.success('Profile updated! ✨');
+      toast.success("Profile updated! ✨");
       setAvatarFile(null);
       setAvatarPreview(null);
-    } catch (error) {
-      toast.error('Failed to update profile');
+    } catch (_error) {
+      toast.error("Failed to update profile");
     }
   };
 
@@ -93,8 +96,12 @@ export default function Profile() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col items-center gap-4">
               <AvatarImage
-                avatar={avatarPreview ? { getDirectURL: () => avatarPreview } as any : userProfile?.avatar}
-                name={name || 'You'}
+                avatar={
+                  avatarPreview
+                    ? ({ getDirectURL: () => avatarPreview } as any)
+                    : userProfile?.avatar
+                }
+                name={name || "You"}
                 size="xl"
               />
               <input
@@ -109,10 +116,14 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 className="rounded-full"
-                onClick={() => document.getElementById('profile-avatar')?.click()}
+                onClick={() =>
+                  document.getElementById("profile-avatar")?.click()
+                }
               >
                 <Upload className="mr-2 h-4 w-4" />
-                {userProfile?.avatar || avatarPreview ? 'Change Avatar' : 'Upload Avatar'}
+                {userProfile?.avatar || avatarPreview
+                  ? "Change Avatar"
+                  : "Upload Avatar"}
               </Button>
               <p className="text-xs text-muted-foreground text-center">
                 Only upload content you own or have permission to use

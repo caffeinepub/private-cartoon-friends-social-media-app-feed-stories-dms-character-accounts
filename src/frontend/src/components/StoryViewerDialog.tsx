@@ -1,8 +1,11 @@
-import { StoryView } from '../backend';
-import { useGetCharacterProfiles, useGetCallerUserProfile } from '../hooks/useQueries';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import AvatarImage from './AvatarImage';
-import { formatDistanceToNow } from 'date-fns';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { formatDistanceToNow } from "date-fns";
+import type { StoryView } from "../backend";
+import {
+  useGetCallerUserProfile,
+  useGetCharacterProfiles,
+} from "../hooks/useQueries";
+import AvatarImage from "./AvatarImage";
 
 interface StoryViewerDialogProps {
   story: StoryView;
@@ -10,13 +13,18 @@ interface StoryViewerDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export default function StoryViewerDialog({ story, open, onOpenChange }: StoryViewerDialogProps) {
+export default function StoryViewerDialog({
+  story,
+  open,
+  onOpenChange,
+}: StoryViewerDialogProps) {
   const { data: characters } = useGetCharacterProfiles();
   const { data: userProfile } = useGetCallerUserProfile();
 
-  const author = story.author === 'user'
-    ? { name: userProfile?.name || 'You', avatar: userProfile?.avatar }
-    : characters?.find(c => c.id === story.author);
+  const author =
+    story.author === "user"
+      ? { name: userProfile?.name || "You", avatar: userProfile?.avatar }
+      : characters?.find((c) => c.id === story.author);
 
   const timestamp = new Date(Number(story.timestamp) / 1_000_000);
   const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true });
@@ -28,9 +36,15 @@ export default function StoryViewerDialog({ story, open, onOpenChange }: StoryVi
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-10 p-4 bg-gradient-to-b from-black/80 to-transparent">
             <div className="flex items-center gap-3">
-              <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="sm" />
+              <AvatarImage
+                avatar={author?.avatar}
+                name={author?.name || "Unknown"}
+                size="sm"
+              />
               <div>
-                <p className="font-bold text-white">{author?.name || 'Unknown'}</p>
+                <p className="font-bold text-white">
+                  {author?.name || "Unknown"}
+                </p>
                 <p className="text-xs text-white/80">{timeAgo}</p>
               </div>
             </div>

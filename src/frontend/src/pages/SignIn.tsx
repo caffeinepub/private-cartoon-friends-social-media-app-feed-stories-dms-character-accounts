@@ -1,30 +1,31 @@
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { Button } from '@/components/ui/button';
-import { Sparkles } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export default function SignIn() {
   const { login, loginStatus } = useInternetIdentity();
-  const isLoggingIn = loginStatus === 'logging-in';
+  const isLoggingIn = loginStatus === "logging-in";
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-[oklch(0.95_0.02_60)] via-[oklch(0.92_0.03_120)] to-[oklch(0.90_0.04_180)]">
       {/* Background pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-20"
         style={{
-          backgroundImage: 'url(/assets/generated/background-tile.dim_1024x1024.png)',
-          backgroundRepeat: 'repeat',
-          backgroundSize: '256px 256px'
+          backgroundImage:
+            "url(/assets/generated/background-tile.dim_1024x1024.png)",
+          backgroundRepeat: "repeat",
+          backgroundSize: "256px 256px",
         }}
       />
-      
+
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-card/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border-4 border-[oklch(0.85_0.05_60)]">
           {/* Logo */}
           <div className="flex justify-center mb-6">
-            <img 
-              src="/assets/generated/logo.dim_512x512.png" 
-              alt="App Logo" 
+            <img
+              src="/assets/generated/logo.dim_512x512.png"
+              alt="App Logo"
               className="w-32 h-32 drop-shadow-lg"
             />
           </div>
@@ -40,8 +41,10 @@ export default function SignIn() {
           {/* Description */}
           <div className="bg-accent/50 rounded-2xl p-6 mb-8 border-2 border-accent">
             <p className="text-sm text-center text-foreground/90 leading-relaxed">
-              Welcome to your personal social space! Connect with your favorite cartoon friends from the 90s and 2000s. 
-              This is a <strong>private app</strong> just for you—create character profiles, share posts, stories, and messages!
+              Welcome to your personal social space! Connect with your favorite
+              cartoon friends from the 90s and 2000s. This is a{" "}
+              <strong>private app</strong> just for you—create character
+              profiles, share posts, stories, and messages!
             </p>
             <p className="text-xs text-center text-muted-foreground mt-3 italic">
               Remember: Only upload content you own or have permission to use.

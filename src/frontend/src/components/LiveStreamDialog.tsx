@@ -1,14 +1,27 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Video, Radio } from 'lucide-react';
-import { toast } from 'sonner';
-import { useGetCharacterProfiles, useGetCallerUserProfile } from '../hooks/useQueries';
-import AvatarImage from './AvatarImage';
-import ScrollableSelectContent from './ScrollableSelectContent';
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Radio, Video } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+  useGetCallerUserProfile,
+  useGetCharacterProfiles,
+} from "../hooks/useQueries";
+import AvatarImage from "./AvatarImage";
+import ScrollableSelectContent from "./ScrollableSelectContent";
 
 interface LiveStreamDialogProps {
   open: boolean;
@@ -16,33 +29,38 @@ interface LiveStreamDialogProps {
   onStreamStart: (stream: { authorId: string; title: string }) => void;
 }
 
-export default function LiveStreamDialog({ open, onOpenChange, onStreamStart }: LiveStreamDialogProps) {
-  const [title, setTitle] = useState('');
-  const [authorId, setAuthorId] = useState('user');
+export default function LiveStreamDialog({
+  open,
+  onOpenChange,
+  onStreamStart,
+}: LiveStreamDialogProps) {
+  const [title, setTitle] = useState("");
+  const [authorId, setAuthorId] = useState("user");
   const [isStreaming, setIsStreaming] = useState(false);
 
   const { data: characters } = useGetCharacterProfiles();
   const { data: userProfile } = useGetCallerUserProfile();
 
-  const selectedAuthor = authorId === 'user'
-    ? { name: userProfile?.name || 'You', avatar: userProfile?.avatar }
-    : characters?.find(c => c.id === authorId);
+  const selectedAuthor =
+    authorId === "user"
+      ? { name: userProfile?.name || "You", avatar: userProfile?.avatar }
+      : characters?.find((c) => c.id === authorId);
 
   const handleStartStream = () => {
     if (!title.trim()) {
-      toast.error('Please enter a stream title');
+      toast.error("Please enter a stream title");
       return;
     }
 
     setIsStreaming(true);
     onStreamStart({ authorId, title: title.trim() });
-    toast.success('Live stream started! 🔴');
-    
+    toast.success("Live stream started! 🔴");
+
     // Reset after a delay
     setTimeout(() => {
       setIsStreaming(false);
-      setTitle('');
-      setAuthorId('user');
+      setTitle("");
+      setAuthorId("user");
       onOpenChange(false);
     }, 2000);
   };
@@ -61,7 +79,11 @@ export default function LiveStreamDialog({ open, onOpenChange, onStreamStart }: 
           <div className="space-y-2">
             <Label>Stream as</Label>
             <div className="flex items-center gap-3">
-              <AvatarImage avatar={selectedAuthor?.avatar} name={selectedAuthor?.name || 'User'} size="sm" />
+              <AvatarImage
+                avatar={selectedAuthor?.avatar}
+                name={selectedAuthor?.name || "User"}
+                size="sm"
+              />
               <Select value={authorId} onValueChange={setAuthorId}>
                 <SelectTrigger className="flex-1 rounded-xl">
                   <SelectValue />
@@ -95,7 +117,9 @@ export default function LiveStreamDialog({ open, onOpenChange, onStreamStart }: 
                 <div className="h-3 w-3 bg-red-500 rounded-full animate-pulse" />
                 LIVE
               </div>
-              <p className="text-sm text-muted-foreground mt-2">Your stream is now live!</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Your stream is now live!
+              </p>
             </div>
           )}
 

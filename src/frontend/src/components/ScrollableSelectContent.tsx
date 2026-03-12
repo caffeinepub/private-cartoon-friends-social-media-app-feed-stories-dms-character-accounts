@@ -1,13 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
-import { SelectContent, SelectScrollUpButton, SelectScrollDownButton } from '@/components/ui/select';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import {
+  SelectContent,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+} from "@/components/ui/select";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface ScrollableSelectContentProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export default function ScrollableSelectContent({ children, className = '' }: ScrollableSelectContentProps) {
+export default function ScrollableSelectContent({
+  children,
+  className = "",
+}: ScrollableSelectContentProps) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
@@ -25,26 +32,28 @@ export default function ScrollableSelectContent({ children, className = '' }: Sc
     // Initial check after a brief delay to ensure content is rendered
     const timer = setTimeout(checkScroll, 100);
 
-    viewport.addEventListener('scroll', checkScroll);
-    
+    viewport.addEventListener("scroll", checkScroll);
+
     // Use ResizeObserver to detect when content changes
     const resizeObserver = new ResizeObserver(checkScroll);
     resizeObserver.observe(viewport);
 
     return () => {
       clearTimeout(timer);
-      viewport.removeEventListener('scroll', checkScroll);
+      viewport.removeEventListener("scroll", checkScroll);
       resizeObserver.disconnect();
     };
   }, []);
 
   return (
-    <SelectContent 
+    <SelectContent
       className={`scrollable-select-content ${className}`}
       ref={(node) => {
         if (node) {
           // Find the viewport element inside SelectContent
-          const viewport = node.querySelector('[data-radix-select-viewport]') as HTMLDivElement;
+          const viewport = node.querySelector(
+            "[data-radix-select-viewport]",
+          ) as HTMLDivElement;
           if (viewport) {
             viewportRef.current = viewport;
           }

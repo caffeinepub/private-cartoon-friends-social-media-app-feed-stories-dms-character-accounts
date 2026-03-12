@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { Home, MessageCircle, Users, User, LogOut, Video } from 'lucide-react';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import HomeFeed from '../pages/HomeFeed';
-import Messages from '../pages/Messages';
-import Characters from '../pages/Characters';
-import Profile from '../pages/Profile';
-import Videos from '../pages/Videos';
+import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
+import { Home, LogOut, MessageCircle, User, Users, Video } from "lucide-react";
+import { useState } from "react";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import Characters from "../pages/Characters";
+import HomeFeed from "../pages/HomeFeed";
+import Messages from "../pages/Messages";
+import Profile from "../pages/Profile";
+import Videos from "../pages/Videos";
 
-type Page = 'home' | 'messages' | 'characters' | 'profile' | 'videos';
+type Page = "home" | "messages" | "characters" | "profile" | "videos";
 
 export default function AppShell() {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [currentPage, setCurrentPage] = useState<Page>("home");
   const { clear } = useInternetIdentity();
   const queryClient = useQueryClient();
 
@@ -23,15 +23,15 @@ export default function AppShell() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home':
+      case "home":
         return <HomeFeed />;
-      case 'messages':
+      case "messages":
         return <Messages />;
-      case 'characters':
+      case "characters":
         return <Characters />;
-      case 'profile':
+      case "profile":
         return <Profile />;
-      case 'videos':
+      case "videos":
         return <Videos />;
       default:
         return <HomeFeed />;
@@ -44,9 +44,9 @@ export default function AppShell() {
       <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img 
-              src="/assets/generated/logo.dim_512x512.png" 
-              alt="ToonSpace" 
+            <img
+              src="/assets/generated/logo.dim_512x512.png"
+              alt="ToonSpace"
               className="w-12 h-12"
             />
             <h1 className="text-2xl font-black bg-gradient-to-r from-[oklch(0.65_0.22_330)] via-[oklch(0.70_0.20_60)] to-[oklch(0.65_0.18_180)] bg-clip-text text-transparent">
@@ -67,9 +67,7 @@ export default function AppShell() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 pb-24">
-        {renderPage()}
-      </main>
+      <main className="container mx-auto px-4 py-6 pb-24">{renderPage()}</main>
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-2xl">
@@ -78,32 +76,32 @@ export default function AppShell() {
             <NavButton
               icon={Home}
               label="Home"
-              active={currentPage === 'home'}
-              onClick={() => setCurrentPage('home')}
+              active={currentPage === "home"}
+              onClick={() => setCurrentPage("home")}
             />
             <NavButton
               icon={Video}
               label="Videos"
-              active={currentPage === 'videos'}
-              onClick={() => setCurrentPage('videos')}
+              active={currentPage === "videos"}
+              onClick={() => setCurrentPage("videos")}
             />
             <NavButton
               icon={MessageCircle}
               label="Messages"
-              active={currentPage === 'messages'}
-              onClick={() => setCurrentPage('messages')}
+              active={currentPage === "messages"}
+              onClick={() => setCurrentPage("messages")}
             />
             <NavButton
               icon={Users}
               label="Characters"
-              active={currentPage === 'characters'}
-              onClick={() => setCurrentPage('characters')}
+              active={currentPage === "characters"}
+              onClick={() => setCurrentPage("characters")}
             />
             <NavButton
               icon={User}
               label="Profile"
-              active={currentPage === 'profile'}
-              onClick={() => setCurrentPage('profile')}
+              active={currentPage === "profile"}
+              onClick={() => setCurrentPage("profile")}
             />
           </div>
         </div>
@@ -112,7 +110,7 @@ export default function AppShell() {
       {/* Footer */}
       <footer className="pb-20 pt-8 text-center text-sm text-muted-foreground">
         <p>
-          © {new Date().getFullYear()} • Built with ❤️ using{' '}
+          © {new Date().getFullYear()} • Built with ❤️ using{" "}
           <a
             href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
             target="_blank"
@@ -127,19 +125,25 @@ export default function AppShell() {
   );
 }
 
-function NavButton({ icon: Icon, label, active, onClick }: {
+function NavButton({
+  icon: Icon,
+  label,
+  active,
+  onClick,
+}: {
   icon: React.ElementType;
   label: string;
   active: boolean;
   onClick: () => void;
 }) {
   return (
+    // biome-ignore lint/a11y/useButtonType: interactive element
     <button
       onClick={onClick}
       className={`flex flex-col items-center gap-1 px-3 py-2 rounded-2xl transition-all ${
         active
-          ? 'bg-gradient-to-br from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] text-white shadow-lg scale-105'
-          : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+          ? "bg-gradient-to-br from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] text-white shadow-lg scale-105"
+          : "text-muted-foreground hover:text-foreground hover:bg-accent"
       }`}
     >
       <Icon className="h-6 w-6" />

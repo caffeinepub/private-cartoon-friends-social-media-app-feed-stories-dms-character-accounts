@@ -1,17 +1,21 @@
-import { useInternetIdentity } from './hooks/useInternetIdentity';
-import { useGetCallerUserProfile } from './hooks/useQueries';
-import SignIn from './pages/SignIn';
-import AppShell from './components/AppShell';
-import ProfileSetupDialog from './components/ProfileSetupDialog';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from 'next-themes';
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "next-themes";
+import AppShell from "./components/AppShell";
+import ProfileSetupDialog from "./components/ProfileSetupDialog";
+import { useInternetIdentity } from "./hooks/useInternetIdentity";
+import { useGetCallerUserProfile } from "./hooks/useQueries";
+import SignIn from "./pages/SignIn";
 
 export default function App() {
   const { identity, loginStatus } = useInternetIdentity();
-  const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
+  const {
+    data: userProfile,
+    isLoading: profileLoading,
+    isFetched,
+  } = useGetCallerUserProfile();
 
   const isAuthenticated = !!identity;
-  const isInitializing = loginStatus === 'initializing';
+  const isInitializing = loginStatus === "initializing";
 
   // Show sign-in screen if not authenticated
   if (!isAuthenticated && !isInitializing) {
@@ -39,7 +43,8 @@ export default function App() {
   }
 
   // Show profile setup if authenticated but no profile exists
-  const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
+  const showProfileSetup =
+    isAuthenticated && !profileLoading && isFetched && userProfile === null;
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

@@ -1,17 +1,20 @@
-import { useState } from 'react';
-import { useGetStories } from '../hooks/useQueries';
-import { Plus } from 'lucide-react';
-import CreateStoryDialog from './CreateStoryDialog';
-import StoryViewerDialog from './StoryViewerDialog';
-import AvatarImage from './AvatarImage';
-import { useGetCharacterProfiles, useGetCallerUserProfile } from '../hooks/useQueries';
-import { StoryView } from '../backend';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import type { StoryView } from "../backend";
+import { useGetStories } from "../hooks/useQueries";
+import {
+  useGetCallerUserProfile,
+  useGetCharacterProfiles,
+} from "../hooks/useQueries";
+import AvatarImage from "./AvatarImage";
+import CreateStoryDialog from "./CreateStoryDialog";
+import StoryViewerDialog from "./StoryViewerDialog";
 
 export default function StoriesRow() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedStory, setSelectedStory] = useState<StoryView | null>(null);
-  
+
   const { data: stories } = useGetStories();
   const { data: characters } = useGetCharacterProfiles();
   const { data: userProfile } = useGetCallerUserProfile();
@@ -23,6 +26,7 @@ export default function StoriesRow() {
           <div className="flex gap-3 pb-2">
             {/* Create Story Button */}
             <button
+              type="button"
               onClick={() => setShowCreateDialog(true)}
               className="flex-shrink-0 flex flex-col items-center gap-2 group"
             >
@@ -31,24 +35,33 @@ export default function StoriesRow() {
               </div>
               <span className="text-xs font-bold text-foreground">Create</span>
             </button>
-
             {/* Stories */}
             {stories?.map((story) => {
-              const author = story.author === 'user'
-                ? { name: userProfile?.name || 'You', avatar: userProfile?.avatar }
-                : characters?.find(c => c.id === story.author);
+              const author =
+                story.author === "user"
+                  ? {
+                      name: userProfile?.name || "You",
+                      avatar: userProfile?.avatar,
+                    }
+                  : characters?.find((c) => c.id === story.author);
 
               return (
                 <button
+                  type="button"
                   key={story.id}
                   onClick={() => setSelectedStory(story)}
                   className="flex-shrink-0 flex flex-col items-center gap-2 group"
                 >
                   <div className="w-16 h-16 rounded-full p-1 bg-gradient-to-br from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] group-hover:scale-105 transition-transform">
-                    <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="md" className="border-2 border-card" />
+                    <AvatarImage
+                      avatar={author?.avatar}
+                      name={author?.name || "Unknown"}
+                      size="md"
+                      className="border-2 border-card"
+                    />
                   </div>
                   <span className="text-xs font-bold text-foreground max-w-[64px] truncate">
-                    {author?.name || 'Unknown'}
+                    {author?.name || "Unknown"}
                   </span>
                 </button>
               );
@@ -58,7 +71,10 @@ export default function StoriesRow() {
         </ScrollArea>
       </div>
 
-      <CreateStoryDialog open={showCreateDialog} onOpenChange={setShowCreateDialog} />
+      <CreateStoryDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+      />
       {selectedStory && (
         <StoryViewerDialog
           story={selectedStory}

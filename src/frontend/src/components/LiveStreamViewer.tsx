@@ -1,9 +1,12 @@
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { X, Eye } from 'lucide-react';
-import AvatarImage from './AvatarImage';
-import { useGetCharacterProfiles, useGetCallerUserProfile } from '../hooks/useQueries';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Eye, X } from "lucide-react";
+import {
+  useGetCallerUserProfile,
+  useGetCharacterProfiles,
+} from "../hooks/useQueries";
+import AvatarImage from "./AvatarImage";
 
 interface LiveStreamViewerProps {
   open: boolean;
@@ -14,15 +17,20 @@ interface LiveStreamViewerProps {
   } | null;
 }
 
-export default function LiveStreamViewer({ open, onOpenChange, stream }: LiveStreamViewerProps) {
+export default function LiveStreamViewer({
+  open,
+  onOpenChange,
+  stream,
+}: LiveStreamViewerProps) {
   const { data: characters } = useGetCharacterProfiles();
   const { data: userProfile } = useGetCallerUserProfile();
 
   if (!stream) return null;
 
-  const author = stream.authorId === 'user'
-    ? { name: userProfile?.name || 'You', avatar: userProfile?.avatar }
-    : characters?.find(c => c.id === stream.authorId);
+  const author =
+    stream.authorId === "user"
+      ? { name: userProfile?.name || "You", avatar: userProfile?.avatar }
+      : characters?.find((c) => c.id === stream.authorId);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,8 +57,14 @@ export default function LiveStreamViewer({ open, onOpenChange, stream }: LiveStr
           {/* Video Stream Area */}
           <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-red-500/20 to-purple-500/20">
             <div className="text-center space-y-4">
-              <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="lg" />
-              <p className="text-white text-xl font-bold">Live Stream in Progress</p>
+              <AvatarImage
+                avatar={author?.avatar}
+                name={author?.name || "Unknown"}
+                size="lg"
+              />
+              <p className="text-white text-xl font-bold">
+                Live Stream in Progress
+              </p>
               <p className="text-white/70">Simulated live stream view</p>
             </div>
           </div>
@@ -59,15 +73,23 @@ export default function LiveStreamViewer({ open, onOpenChange, stream }: LiveStr
           <div className="bg-card border-t-4 border-border p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="md" />
+                <AvatarImage
+                  avatar={author?.avatar}
+                  name={author?.name || "Unknown"}
+                  size="md"
+                />
                 <div>
                   <h3 className="font-bold text-lg">{stream.title}</h3>
-                  <p className="text-sm text-muted-foreground">{author?.name || 'Unknown'}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {author?.name || "Unknown"}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Eye className="h-5 w-5" />
-                <span className="font-semibold">{Math.floor(Math.random() * 500) + 50} watching</span>
+                <span className="font-semibold">
+                  {Math.floor(Math.random() * 500) + 50} watching
+                </span>
               </div>
             </div>
           </div>

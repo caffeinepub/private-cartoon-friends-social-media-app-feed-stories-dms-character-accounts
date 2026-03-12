@@ -1,8 +1,11 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Eye } from 'lucide-react';
-import AvatarImage from './AvatarImage';
-import { useGetCharacterProfiles, useGetCallerUserProfile } from '../hooks/useQueries';
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Eye } from "lucide-react";
+import {
+  useGetCallerUserProfile,
+  useGetCharacterProfiles,
+} from "../hooks/useQueries";
+import AvatarImage from "./AvatarImage";
 
 interface LiveStreamCardProps {
   stream: {
@@ -12,16 +15,20 @@ interface LiveStreamCardProps {
   onClick: () => void;
 }
 
-export default function LiveStreamCard({ stream, onClick }: LiveStreamCardProps) {
+export default function LiveStreamCard({
+  stream,
+  onClick,
+}: LiveStreamCardProps) {
   const { data: characters } = useGetCharacterProfiles();
   const { data: userProfile } = useGetCallerUserProfile();
 
-  const author = stream.authorId === 'user'
-    ? { name: userProfile?.name || 'You', avatar: userProfile?.avatar }
-    : characters?.find(c => c.id === stream.authorId);
+  const author =
+    stream.authorId === "user"
+      ? { name: userProfile?.name || "You", avatar: userProfile?.avatar }
+      : characters?.find((c) => c.id === stream.authorId);
 
   return (
-    <Card 
+    <Card
       className="rounded-3xl border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform"
       onClick={onClick}
     >
@@ -38,15 +45,25 @@ export default function LiveStreamCard({ stream, onClick }: LiveStreamCardProps)
             <Eye className="h-4 w-4" />
             <span>{Math.floor(Math.random() * 500) + 50}</span>
           </div>
-          <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="lg" />
+          <AvatarImage
+            avatar={author?.avatar}
+            name={author?.name || "Unknown"}
+            size="lg"
+          />
         </div>
 
         {/* Info */}
         <div className="p-4 space-y-2">
           <h3 className="font-bold text-lg line-clamp-2">{stream.title}</h3>
           <div className="flex items-center gap-2">
-            <AvatarImage avatar={author?.avatar} name={author?.name || 'Unknown'} size="sm" />
-            <p className="text-sm text-muted-foreground">{author?.name || 'Unknown'}</p>
+            <AvatarImage
+              avatar={author?.avatar}
+              name={author?.name || "Unknown"}
+              size="sm"
+            />
+            <p className="text-sm text-muted-foreground">
+              {author?.name || "Unknown"}
+            </p>
           </div>
         </div>
       </CardContent>

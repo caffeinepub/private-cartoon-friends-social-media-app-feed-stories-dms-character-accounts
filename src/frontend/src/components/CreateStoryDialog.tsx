@@ -1,23 +1,36 @@
-import { useState } from 'react';
-import { useCreateStory, useGetCharacterProfiles } from '../hooks/useQueries';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Image, Sparkles } from 'lucide-react';
-import { toast } from 'sonner';
-import { ExternalBlob } from '../backend';
-import ScrollableSelectContent from './ScrollableSelectContent';
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Image, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { ExternalBlob } from "../backend";
+import { useCreateStory, useGetCharacterProfiles } from "../hooks/useQueries";
+import ScrollableSelectContent from "./ScrollableSelectContent";
 
 interface CreateStoryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export default function CreateStoryDialog({ open, onOpenChange }: CreateStoryDialogProps) {
-  const [authorId, setAuthorId] = useState('user');
-  const [caption, setCaption] = useState('');
+export default function CreateStoryDialog({
+  open,
+  onOpenChange,
+}: CreateStoryDialogProps) {
+  const [authorId, setAuthorId] = useState("user");
+  const [caption, setCaption] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -28,7 +41,7 @@ export default function CreateStoryDialog({ open, onOpenChange }: CreateStoryDia
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image must be less than 5MB');
+        toast.error("Image must be less than 5MB");
         return;
       }
       setImageFile(file);
@@ -41,7 +54,7 @@ export default function CreateStoryDialog({ open, onOpenChange }: CreateStoryDia
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!imageFile) {
-      toast.error('Please select an image');
+      toast.error("Please select an image");
       return;
     }
 
@@ -53,20 +66,20 @@ export default function CreateStoryDialog({ open, onOpenChange }: CreateStoryDia
       await createStory.mutateAsync({
         authorId,
         image: imageBlob,
-        caption: caption.trim()
+        caption: caption.trim(),
       });
 
-      toast.success('Story created! ✨');
+      toast.success("Story created! ✨");
       onOpenChange(false);
       resetForm();
-    } catch (error) {
-      toast.error('Failed to create story');
+    } catch (_error) {
+      toast.error("Failed to create story");
     }
   };
 
   const resetForm = () => {
-    setAuthorId('user');
-    setCaption('');
+    setAuthorId("user");
+    setCaption("");
     setImageFile(null);
     setImagePreview(null);
   };
@@ -131,7 +144,9 @@ export default function CreateStoryDialog({ open, onOpenChange }: CreateStoryDia
                   type="button"
                   variant="outline"
                   className="w-full h-32 rounded-xl"
-                  onClick={() => document.getElementById('story-image')?.click()}
+                  onClick={() =>
+                    document.getElementById("story-image")?.click()
+                  }
                 >
                   <Image className="mr-2 h-6 w-6" />
                   Select Image

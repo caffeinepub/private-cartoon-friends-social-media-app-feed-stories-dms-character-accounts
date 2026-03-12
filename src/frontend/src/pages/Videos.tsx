@@ -1,23 +1,31 @@
-import { useState } from 'react';
-import { useGetVideos } from '../hooks/useQueries';
-import { Button } from '@/components/ui/button';
-import { Video, Radio } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import VideoComposer from '../components/VideoComposer';
-import VideoCard from '../components/VideoCard';
-import LiveStreamDialog from '../components/LiveStreamDialog';
-import LiveStreamCard from '../components/LiveStreamCard';
-import LiveStreamViewer from '../components/LiveStreamViewer';
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Radio, Video } from "lucide-react";
+import { useState } from "react";
+import LiveStreamCard from "../components/LiveStreamCard";
+import LiveStreamDialog from "../components/LiveStreamDialog";
+import LiveStreamViewer from "../components/LiveStreamViewer";
+import VideoCard from "../components/VideoCard";
+import VideoComposer from "../components/VideoComposer";
+import { useGetVideos } from "../hooks/useQueries";
 
 export default function Videos() {
   const [showLiveDialog, setShowLiveDialog] = useState(false);
-  const [activeStream, setActiveStream] = useState<{ authorId: string; title: string } | null>(null);
-  const [viewingStream, setViewingStream] = useState<{ authorId: string; title: string } | null>(null);
+  const [activeStream, setActiveStream] = useState<{
+    authorId: string;
+    title: string;
+  } | null>(null);
+  const [viewingStream, setViewingStream] = useState<{
+    authorId: string;
+    title: string;
+  } | null>(null);
 
   const { data: videos, isLoading } = useGetVideos();
 
   // Sort videos by timestamp (newest first)
-  const sortedVideos = videos ? [...videos].sort((a, b) => Number(b.timestamp - a.timestamp)) : [];
+  const sortedVideos = videos
+    ? [...videos].sort((a, b) => Number(b.timestamp - a.timestamp))
+    : [];
 
   const handleStreamStart = (stream: { authorId: string; title: string }) => {
     setActiveStream(stream);
@@ -77,7 +85,9 @@ export default function Videos() {
             </p>
           </div>
         ) : (
-          sortedVideos.map((video) => <VideoCard key={video.id} video={video} />)
+          sortedVideos.map((video) => (
+            <VideoCard key={video.id} video={video} />
+          ))
         )}
       </div>
 
