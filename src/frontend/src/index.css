@@ -6,87 +6,86 @@
   :root {
     --radius: 1rem;
 
-    /* Retro warm palette - Light mode */
-    --background: 0.98 0.01 60;
-    --foreground: 0.2 0.02 30;
+    /* Toonspace - bright, fun, cartoon-friendly - Light mode */
+    --background: 0.97 0.01 220;
+    --foreground: 0.15 0.02 220;
     --card: 1 0 0;
-    --card-foreground: 0.2 0.02 30;
+    --card-foreground: 0.15 0.02 220;
     --popover: 1 0 0;
-    --popover-foreground: 0.2 0.02 30;
+    --popover-foreground: 0.15 0.02 220;
 
-    /* Primary: Vibrant magenta-pink */
-    --primary: 0.65 0.22 330;
+    /* Primary: Bright sky blue */
+    --primary: 0.55 0.2 220;
     --primary-foreground: 1 0 0;
 
-    /* Secondary: Warm peach */
-    --secondary: 0.9 0.08 60;
-    --secondary-foreground: 0.3 0.04 30;
+    /* Secondary: Warm sunny orange */
+    --secondary: 0.88 0.1 55;
+    --secondary-foreground: 0.2 0.04 40;
 
-    /* Muted: Soft cream */
-    --muted: 0.95 0.02 80;
-    --muted-foreground: 0.5 0.03 40;
+    /* Muted: Soft light blue-gray */
+    --muted: 0.93 0.02 220;
+    --muted-foreground: 0.5 0.03 220;
 
-    /* Accent: Bright cyan */
-    --accent: 0.88 0.1 200;
-    --accent-foreground: 0.25 0.04 220;
+    /* Accent: Bright lime-green */
+    --accent: 0.88 0.1 140;
+    --accent-foreground: 0.2 0.06 140;
 
     /* Destructive: Bold red */
     --destructive: 0.6 0.24 25;
     --destructive-foreground: 1 0 0;
 
     /* Borders and inputs */
-    --border: 0.85 0.05 60;
-    --input: 0.9 0.04 60;
-    --ring: 0.65 0.22 330;
+    --border: 0.85 0.04 220;
+    --input: 0.9 0.03 220;
+    --ring: 0.55 0.2 220;
 
-    /* Chart colors - vibrant retro palette */
-    --chart-1: 0.7 0.2 330;
-    --chart-2: 0.75 0.18 180;
-    --chart-3: 0.68 0.22 60;
-    --chart-4: 0.72 0.19 280;
-    --chart-5: 0.65 0.2 120;
+    /* Chart colors */
+    --chart-1: 0.55 0.2 220;
+    --chart-2: 0.65 0.18 55;
+    --chart-3: 0.6 0.2 140;
+    --chart-4: 0.62 0.18 300;
+    --chart-5: 0.65 0.2 25;
   }
 
   .dark {
-    /* Dark mode - deeper, richer tones */
-    --background: 0.15 0.02 280;
-    --foreground: 0.95 0.01 60;
-    --card: 0.2 0.03 280;
-    --card-foreground: 0.95 0.01 60;
-    --popover: 0.18 0.03 280;
-    --popover-foreground: 0.95 0.01 60;
+    --background: 0.15 0.03 220;
+    --foreground: 0.95 0.01 220;
+    --card: 0.2 0.03 220;
+    --card-foreground: 0.95 0.01 220;
+    --popover: 0.18 0.03 220;
+    --popover-foreground: 0.95 0.01 220;
 
-    /* Primary: Neon magenta */
-    --primary: 0.75 0.25 330;
-    --primary-foreground: 0.15 0.02 280;
+    /* Primary: Bright blue */
+    --primary: 0.65 0.22 220;
+    --primary-foreground: 0.1 0.02 220;
 
-    /* Secondary: Deep purple */
-    --secondary: 0.35 0.1 280;
-    --secondary-foreground: 0.95 0.01 60;
+    /* Secondary: Deep teal */
+    --secondary: 0.3 0.08 200;
+    --secondary-foreground: 0.95 0.01 220;
 
     /* Muted: Dark slate */
-    --muted: 0.25 0.03 260;
-    --muted-foreground: 0.65 0.02 240;
+    --muted: 0.25 0.03 220;
+    --muted-foreground: 0.65 0.02 220;
 
-    /* Accent: Electric cyan */
-    --accent: 0.65 0.18 200;
-    --accent-foreground: 0.95 0.01 200;
+    /* Accent: Electric green */
+    --accent: 0.55 0.18 140;
+    --accent-foreground: 0.95 0.01 140;
 
-    /* Destructive: Hot pink-red */
+    /* Destructive */
     --destructive: 0.65 0.28 15;
     --destructive-foreground: 0.95 0.01 60;
 
     /* Borders and inputs */
-    --border: 0.3 0.04 280;
-    --input: 0.25 0.04 280;
-    --ring: 0.7 0.24 330;
+    --border: 0.3 0.04 220;
+    --input: 0.25 0.04 220;
+    --ring: 0.65 0.22 220;
 
-    /* Chart colors - neon palette */
-    --chart-1: 0.75 0.25 330;
-    --chart-2: 0.7 0.22 180;
-    --chart-3: 0.72 0.24 60;
-    --chart-4: 0.68 0.2 280;
-    --chart-5: 0.7 0.23 120;
+    /* Chart colors */
+    --chart-1: 0.65 0.22 220;
+    --chart-2: 0.65 0.18 55;
+    --chart-3: 0.6 0.22 140;
+    --chart-4: 0.62 0.18 300;
+    --chart-5: 0.65 0.2 25;
   }
 
   * {
@@ -140,12 +139,20 @@
   position: sticky;
   z-index: 10;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  background: oklch(var(--popover));
+  cursor: pointer;
 }
 
 .scrollable-select-content [data-radix-select-scroll-up-button] {
   top: 0;
+  border-bottom: 1px solid oklch(var(--border));
 }
 
 .scrollable-select-content [data-radix-select-scroll-down-button] {
   bottom: 0;
+  border-top: 1px solid oklch(var(--border));
 }

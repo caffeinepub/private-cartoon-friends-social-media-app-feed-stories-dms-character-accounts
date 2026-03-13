@@ -30,8 +30,8 @@ export default function PostComposer() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image must be less than 5MB");
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Image must be less than 10MB");
         return;
       }
       setImageFile(file);
@@ -54,12 +54,12 @@ export default function PostComposer() {
       let imageBlob: ExternalBlob | null = null;
       if (imageFile) {
         setUploadStep("uploading");
-        setUploadProgress(0);
+        setUploadProgress(10);
         const arrayBuffer = await imageFile.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
         imageBlob = ExternalBlob.fromBytes(uint8Array).withUploadProgress(
           (percentage) => {
-            setUploadProgress(percentage);
+            setUploadProgress(Math.max(percentage, 10));
           },
         );
       }
@@ -77,7 +77,7 @@ export default function PostComposer() {
       setAuthorId("user");
       setUploadProgress(0);
       setUploadStep("idle");
-      toast.success("Post shared! 🎉");
+      toast.success("Post shared!");
     } catch {
       // Keep all form state so user can tap again without starting over
       setUploadStep("idle");
@@ -87,7 +87,7 @@ export default function PostComposer() {
   };
 
   return (
-    <div className="bg-card rounded-3xl p-6 border-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg">
+    <div className="bg-card rounded-3xl p-6 border-4 border-[oklch(0.85_0.04_220)] dark:border-border shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label>Post as</Label>
@@ -109,9 +109,10 @@ export default function PostComposer() {
         <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="What's on your mind? Share with your toon friends! 🎨"
+          placeholder="What's on your mind? Share with your toon friends!"
           className="min-h-24 rounded-xl resize-none"
           disabled={isPosting}
+          data-ocid="post.textarea"
         />
 
         {imagePreview && (
@@ -142,17 +143,17 @@ export default function PostComposer() {
           <div className="bg-primary/10 rounded-xl p-3 space-y-2">
             <div className="flex items-center gap-2 text-sm">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              <span>
+              <span className="text-foreground font-medium">
                 {uploadStep === "uploading"
                   ? `Uploading image... ${uploadProgress}%`
-                  : "Saving post..."}
+                  : "Saving your post..."}
               </span>
             </div>
-            {uploadStep === "uploading" && uploadProgress > 0 && (
+            {uploadStep === "uploading" && (
               <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                 <div
                   className="bg-primary h-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
+                  style={{ width: `${Math.max(uploadProgress, 10)}%` }}
                 />
               </div>
             )}
@@ -181,7 +182,7 @@ export default function PostComposer() {
 
           <Button
             type="submit"
-            className="ml-auto rounded-full font-bold bg-gradient-to-r from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] hover:from-[oklch(0.60_0.24_330)] hover:to-[oklch(0.65_0.22_60)]"
+            className="ml-auto rounded-full font-bold"
             disabled={isPosting}
             data-ocid="post.submit_button"
           >

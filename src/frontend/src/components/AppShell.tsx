@@ -39,9 +39,9 @@ export default function AppShell() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[oklch(0.98_0.01_60)] via-[oklch(0.96_0.02_120)] to-[oklch(0.94_0.03_180)] dark:from-background dark:via-background dark:to-background">
+    <div className="min-h-screen bg-gradient-to-br from-[oklch(0.97_0.02_220)] via-[oklch(0.96_0.02_180)] to-[oklch(0.95_0.03_140)] dark:from-background dark:via-background dark:to-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-lg">
+      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b-4 border-[oklch(0.85_0.04_220)] dark:border-border shadow-lg">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
@@ -49,7 +49,7 @@ export default function AppShell() {
               alt="ToonSpace"
               className="w-12 h-12"
             />
-            <h1 className="text-2xl font-black bg-gradient-to-r from-[oklch(0.65_0.22_330)] via-[oklch(0.70_0.20_60)] to-[oklch(0.65_0.18_180)] bg-clip-text text-transparent">
+            <h1 className="text-2xl font-black bg-gradient-to-r from-[oklch(0.55_0.2_220)] via-[oklch(0.6_0.18_180)] to-[oklch(0.55_0.2_140)] bg-clip-text text-transparent">
               ToonSpace
             </h1>
           </div>
@@ -70,7 +70,7 @@ export default function AppShell() {
       <main className="container mx-auto px-4 py-6 pb-24">{renderPage()}</main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t-4 border-[oklch(0.85_0.05_60)] dark:border-border shadow-2xl">
+      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-sm border-t-4 border-[oklch(0.85_0.04_220)] dark:border-border shadow-2xl">
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-around items-center max-w-2xl mx-auto">
             <NavButton
@@ -142,7 +142,7 @@ function NavButton({
       onClick={onClick}
       className={`flex flex-col items-center gap-1 px-3 py-2 rounded-2xl transition-all ${
         active
-          ? "bg-gradient-to-br from-[oklch(0.65_0.22_330)] to-[oklch(0.70_0.20_60)] text-white shadow-lg scale-105"
+          ? "bg-gradient-to-br from-[oklch(0.55_0.2_220)] to-[oklch(0.6_0.18_180)] text-white shadow-lg scale-105"
           : "text-muted-foreground hover:text-foreground hover:bg-accent"
       }`}
     >
